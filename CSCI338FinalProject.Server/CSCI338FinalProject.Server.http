@@ -1,0 +1,6 @@
+@CSCI338FinalProject.Server_HostAddress = http://localhost:5111
+
+GET {{CSCI338FinalProject.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

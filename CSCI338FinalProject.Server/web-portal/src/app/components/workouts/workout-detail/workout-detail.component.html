@@ -1,0 +1,9 @@
+<h2>Workout Detail</h2>
+
+<div *ngIf="workout">
+  <p><strong>Date:</strong> {{ workout.date }}</p>
+  <p><strong>Notes:</strong> {{ workout.notes }}</p>
+
+  <button class="btn btn-primary" (click)="edit()">Edit</button>
+  <button class="btn btn-secondary" routerLink="/workouts">Back</button>
+</div>

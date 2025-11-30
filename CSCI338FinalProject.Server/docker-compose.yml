@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  mariadb:
+    image: mariadb:11
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: workoutdb
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    ports:
+      - "3306:3306"

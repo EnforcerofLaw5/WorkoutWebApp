@@ -1,0 +1,20 @@
+<h2>{{ isEdit ? 'Edit Workout' : 'New Workout' }}</h2>
+
+<form (ngSubmit)="save()">
+
+  <div>
+    <label>Date:</label>
+    <input type="date" [(ngModel)]="workout.date" name="date" required>
+  </div>
+
+  <div>
+    <label>Notes:</label>
+    <textarea [(ngModel)]="workout.notes" name="notes"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    {{ isEdit ? 'Update' : 'Create' }}
+  </button>
+
+  <button routerLink="/workouts" class="btn btn-secondary">Cancel</button>
+</form>
