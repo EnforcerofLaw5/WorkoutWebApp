@@ -5,9 +5,11 @@
     + New Workout
   </a>
 
-  <div *ngIf="loading">Loading...</div>
-
-  <table class="table table-striped" *ngIf="!loading">
+  @if(loading$) {
+  <div>Loading...</div>
+  }
+  @else {
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Date</th>
@@ -16,26 +18,24 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let w of workouts">
+      <tr *ngFor="let w of workouts$">
         <td>{{ w.date }}</td>
         <td>{{ w.notes }}</td>
         <td>
-          <button class="btn btn-sm btn-info"
-                  [routerLink]="['/workouts', w.id]">
+          <button class="btn btn-sm btn-info" [routerLink]="['/workouts', w.id]">
             View
           </button>
 
-          <button class="btn btn-sm btn-warning"
-                  [routerLink]="['/workouts', w.id, 'edit']">
+          <button class="btn btn-sm btn-warning" [routerLink]="['/workouts', w.id, 'edit']">
             Edit
           </button>
 
-          <button class="btn btn-sm btn-danger"
-                  (click)="deleteWorkout(w.id)">
+          <button class="btn btn-sm btn-danger" (click)="deleteWorkout(w.id)">
             Delete
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+  }
 </div>

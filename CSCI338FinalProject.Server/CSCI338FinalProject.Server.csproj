@@ -1,18 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <SpaRoot>..\csci338finalproject.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:58014</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
-      <Version>9.0.11</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.11">
@@ -20,6 +14,30 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="JSON\Exercise.ts">
+      <CustomToolNamespace>Models\Exercise.cs</CustomToolNamespace>
+    </None>
+    <None Update="JSON\ExerciseSet.ts">
+      <CustomToolNamespace>Models\ExerciseSet.cs</CustomToolNamespace>
+    </None>
+    <None Update="JSON\User.ts">
+      <CustomToolNamespace>Models\User.cs</CustomToolNamespace>
+    </None>
+    <None Update="JSON\Workout.ts">
+      <CustomToolNamespace>Models\Workout.cs</CustomToolNamespace>
+    </None>
+    <None Update="JSON\WorkoutController.ts">
+      <CustomToolNamespace>Controllers\WorkoutController.cs</CustomToolNamespace>
+    </None>
+    <None Update="JSON\WorkoutExercise.ts">
+      <CustomToolNamespace>Models\WorkoutExercise.cs</CustomToolNamespace>
+    </None>
+    <None Update="JSON\WorkoutExerciseController.ts">
+      <CustomToolNamespace>Controllers\WorkoutExerciseController.cs</CustomToolNamespace>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ export interface WorkoutExercise {
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutExerciseService {
-  private baseUrl = 'https://localhost:7135/api/workoutexercise';
+  private baseUrl = 'https://localhost:7135';
 
   constructor(private http: HttpClient) { }
 

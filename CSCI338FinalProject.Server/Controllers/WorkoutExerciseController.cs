@@ -1,62 +1,51 @@
 ﻿using CSCI338FinalProject.Server.Data;
 using CSCI338FinalProject.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CSCI338FinalProject.Server.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class WorkoutExerciseController : ControllerBase
-    {
-        private readonly AppDbContext _context;
-        public WorkoutExerciseController(AppDbContext context) => _context = context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class WorkoutExerciseController : ControllerBase
+	{
+		private readonly AppStore _appStore;
+		public WorkoutExerciseController(AppStore context) => _appStore = context;
 
-        [HttpGet("workout/{workoutId}")]
-        public async Task<ActionResult<IEnumerable<WorkoutExercise>>> GetExercisesForWorkout(int workoutId)
-        {
-            var items = await _context.WorkoutExercises
-                .Include(we => we.Exercise)
-                .Where(we => we.WorkoutId == workoutId)
-                .ToListAsync();
+		[HttpGet("workout/{workoutId}")]
+		public IActionResult GetExercisesForWorkout(int workoutId)
+		{
+			var workout = _appStore.Workouts.FirstOrDefault(x => x.Id == workoutId);
+			if (workout == null)
+				return NotFound();
+			else
+				return Ok(workout.WorkoutExercises);
+		}
 
-            return Ok(items);
-        }
+		[HttpGet("{id}")]
+		public IActionResult GetWorkoutExercise(int id)
+		{
+			var item = _appStore.WorkoutExercises.FirstOrDefault(x => x.Id == id);
+			if (item == null)
+				return NotFound();
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<WorkoutExercise>> GetWorkoutExercise(int workoutId)
-        {
-            var item = await _context.WorkoutExercises
-                .Include(we => we.Exercise)
-                .Include(we => we.Workout)
-                .FirstOrDefaultAsync(x => x.Id == workoutId);
+			return Ok(item);
+		}
 
-            if (item == null)
-                return NotFound();
+		[HttpPost]
+		public ActionResult<WorkoutExercise> CreateWorkoutExercise(WorkoutExercise workoutExercise)
+		{
+			var added = _appStore.AddWorkoutExercise(workoutExercise);
+			
+			return Ok(added);
+		}
 
-            return item;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<WorkoutExercise>> CreateWorkoutExercise(WorkoutExercise workoutExercise)
-        {
-            _context.WorkoutExercises.Add(workoutExercise);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetWorkoutExercise),
-                new { id = workoutExercise.Id }, workoutExercise);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<WorkoutExercise>> DeleteWorkoutExerciseId(int workoutId)
-        {
-            var item = await _context.WorkoutExercises.FindAsync(workoutId);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            _context.WorkoutExercises.Remove(item);
-            await _context.SaveChangesAsync();
-            return Ok(item);
-        }
-    }
+		[HttpDelete("{id}")]
+		public IActionResult DeleteWorkoutExerciseId(int id)
+		{
+			var workout = _appStore.WorkoutExercises.FirstOrDefault(x => x.Id == id);
+			if (workout != null)
+				this._appStore.WorkoutExercises.Remove(workout);
+			return Ok();
+		}
+	}
 }

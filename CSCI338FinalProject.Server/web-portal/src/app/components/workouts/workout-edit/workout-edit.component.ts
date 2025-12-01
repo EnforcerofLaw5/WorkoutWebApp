@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { WorkoutService, Workout } from '../../../services/workout.service';
-import { provideHttpClient  } from '@angular/common/http';
+import { WorkoutService } from '../../../services/workout.service';
+import { Workout } from '../../../entities';
 
 @Component({
   selector: 'app-workout-edit',
@@ -17,20 +17,15 @@ import { provideHttpClient  } from '@angular/common/http';
 })
 export class WorkoutEditComponent implements OnInit {
 
-  workout: Workout = {
-    id: 0,
-    userId: 1,
-    date: '',
-    notes: ''
-  };
-
   isEdit = false;
+  protected workout: Workout = { id: 0, name: '', type: '', date: new Date(), user: { id: 0, name: '', age: 0, weight: 0, goal: '', workouts: [] }, userID: 0, notes: '', workoutExercises: [] };
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private workoutService: WorkoutService
-  ) {}
+    private workoutService: WorkoutService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('id');
@@ -39,7 +34,10 @@ export class WorkoutEditComponent implements OnInit {
       this.isEdit = true;
       const id = Number(param);
 
-      this.workoutService.get(id).subscribe(w => this.workout = w);
+      this.workoutService.get(id).subscribe(w => {
+        this.workout = w;
+        this.cdr.detectChanges();
+      });
     }
   }
 

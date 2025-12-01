@@ -15,23 +15,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<Suggestion>();
+builder.Services.AddSingleton<AppStore>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "Dev",
-    policy =>
-    {
-        policy.AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true) // any origin
-    .AllowAnyOrigin();                    // any origin (no credentials)
-    });
+	options.AddPolicy("Dev", builder =>
+	{
+		builder.AllowAnyOrigin()
+			   .AllowAnyMethod()
+			   .AllowAnyHeader();
+	});
 });
 
 var app = builder.Build();
-
-app.UseCors("Dev");
-
 
 if (!app.Environment.IsDevelopment())
 {
@@ -40,6 +36,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("Dev");
 
 app.MapControllerRoute(
     name: "default",
@@ -52,7 +49,7 @@ app.MapStaticAssets();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 

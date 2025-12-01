@@ -1,8 +1,6 @@
 ﻿using CSCI338FinalProject.Server.Data;
 using CSCI338FinalProject.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
 
 
 namespace CSCI338FinalProject.Server.Controllers
@@ -11,13 +9,13 @@ namespace CSCI338FinalProject.Server.Controllers
     [ApiController]
     public class WorkoutController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public WorkoutController(AppDbContext context) => _context = context;
+        private readonly AppStore _appStore;
+        public WorkoutController(AppStore appStore) => _appStore = appStore;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllWorkouts() 
+        public IActionResult GetAllWorkouts() 
         {
-            var workouts = await _context.Workouts.Include(w => w.WorkoutExercises).ThenInclude(e => e.Exercise).ToListAsync();
+            var workouts = _appStore.Workouts;
             return Ok(workouts);
         }
 
@@ -29,28 +27,23 @@ namespace CSCI338FinalProject.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetWorkoutById(int id)
+        public IActionResult GetWorkoutById(int id)
         {
-            var workout = await _context.Workouts.Include(w => w.WorkoutExercises).ThenInclude(e => e.Exercise).FirstOrDefaultAsync(i => i.Id == id);
-            if (workout == null)
-            {
-                return NotFound();
-            }
-            return Ok(workout);
+            var workout= this._appStore.Workouts.Where( x => x.Id == id).FirstOrDefault();
+                        return Ok(workout);
         }
          
         [HttpPost]
-        public async Task<IActionResult> Create(Workout workout)
+        public IActionResult Create(Workout workout)
         {
-            _context.Workouts.Add(workout);
-            await _context.SaveChangesAsync();
-            return Ok();
+            var created = this._appStore.AddWorkOut(workout);
+			            return Ok(created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWorkout(int id, Workout workout)
+        public IActionResult UpdateWorkout(int id, Workout workout)
         {
-            var updateWorkout = await _context.Workouts.FindAsync(id);
+            var updateWorkout = _appStore.Workouts.FirstOrDefault( x => x.Id == id);
             if (updateWorkout == null)
             {
                 return NotFound();
@@ -58,18 +51,16 @@ namespace CSCI338FinalProject.Server.Controllers
             updateWorkout.Type = workout.Type;
             updateWorkout.Notes = workout.Notes;
             updateWorkout.date = workout.date;
-            await _context.SaveChangesAsync();
             return Ok(updateWorkout);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWorkout(int id)
+        public IActionResult DeleteWorkout(int id)
         {
-            var workout =  await _context.Workouts.FindAsync(id);
-            if (workout == null) { return NotFound(); }
-            _context.Workouts.Remove(workout);
-            await _context.SaveChangesAsync();
-            return Ok(workout);
+            var workout = _appStore.Workouts.FirstOrDefault(x => x.Id == id);
+            if(workout != null)
+                this._appStore.Workouts.Remove(workout);
+            return Ok();
         }
     }
 }

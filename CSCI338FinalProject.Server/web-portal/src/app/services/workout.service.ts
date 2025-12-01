@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Workout {
-  id: number;
-  userId: number;
-  date: string;
-  notes: string;
-}
+import { Workout } from '../entities';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutService {
-  private baseUrl = 'http://localhost:5111/api/workout';
+  private baseUrl = `https://localhost:7114/api/workout`;
 
   constructor(private http: HttpClient) { }
 
@@ -34,8 +28,4 @@ export class WorkoutService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
-
-  list(): Observable<Workout[]> {
-  return this.http.get<Workout[]>(`${this.baseUrl}`);
-}
 }
