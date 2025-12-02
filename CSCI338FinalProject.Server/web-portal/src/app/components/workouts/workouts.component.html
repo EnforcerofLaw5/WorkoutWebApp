@@ -19,7 +19,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let w of workouts$">
-        <td>{{ w.date }}</td>
+        <td>{{ w.date | dfnsFormat: 'MM/dd/yyyy' }}</td>
         <td>{{ w.notes }}</td>
         <td>
           <button class="btn btn-sm btn-info" [routerLink]="['/workouts', w.id]">

@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { WorkoutService } from '../../services/workout.service';
 import { Workout } from '../../entities';
+import { enUS } from 'date-fns/locale';
+import { DateFnsModule } from 'ngx-date-fns';
 
 
 @Component({
   selector: 'app-workouts',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DateFnsModule],
   templateUrl: './workouts.component.html'
 })
 export class WorkoutsComponent implements OnInit {
@@ -19,12 +21,12 @@ export class WorkoutsComponent implements OnInit {
   constructor(private workoutService: WorkoutService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    let t = this;
+    let that = this;
 
-    t.workoutService.getAll().subscribe((ws) => {
-      t.workouts$ = ws;
-      t.loading$ = false;
-      t.cdr.detectChanges();
+    that.workoutService.getAll().subscribe((ws) => {
+      that.workouts$ = ws;
+      that.loading$ = false;
+      that.cdr.detectChanges();
     });
   }
 
