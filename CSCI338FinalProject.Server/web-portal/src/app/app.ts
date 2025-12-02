@@ -8,7 +8,6 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html'
 })
 export class App implements OnInit {
-  public title:string = "test";
   ngOnInit(): void {
   }
 }

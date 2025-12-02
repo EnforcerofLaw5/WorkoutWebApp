@@ -9,23 +9,23 @@ export class WorkoutService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Workout[]> {
+  getAll = () => {
     return this.http.get<Workout[]>(this.baseUrl);
   }
 
-  get(id: number): Observable<Workout> {
+  get = (id: number) => {
     return this.http.get<Workout>(`${this.baseUrl}/${id}`);
   }
 
-  create(workout: Workout): Observable<Workout[]> {
+  create = (workout: Workout) => {
     return this.http.post<Workout[]>(this.baseUrl, workout);
   }
 
-  update(id: number, workout: Workout): Observable<void> {
+  update = (id: number, workout: Workout) => {
     return this.http.put<void>(`${this.baseUrl}/${id}`, workout);
   }
 
-  delete(id: number): Observable<void> {
+  delete = (id: number) => {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
