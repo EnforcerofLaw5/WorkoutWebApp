@@ -11,7 +11,6 @@
  // Find all classes with a name ending with Model  
     export interface WorkoutExercise { 
         id: number;
-        workout: Workout;
         workoutId: number;
         exercise: Exercise;
         exerciseId: number;

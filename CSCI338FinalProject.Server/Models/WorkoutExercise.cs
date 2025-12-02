@@ -5,7 +5,6 @@ namespace CSCI338FinalProject.Server.Models
     public class WorkoutExercise
     {
         [Required] public int Id { get; set; }
-        public Workout Workout { get; set; }
         public int WorkoutId { get; set; }
         public Exercise Exercise { get; set; }
         public int ExerciseId { get; set; }

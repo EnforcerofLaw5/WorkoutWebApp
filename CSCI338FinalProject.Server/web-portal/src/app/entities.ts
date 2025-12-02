@@ -12,9 +12,7 @@ export interface ExerciseSet {
     repsCompleted: number;
     rpe: number;
     weightUsed: number;
-    workoutExercise: WorkoutExercise;
     timeStamp: Date;
-
 }
 
 export interface User {
@@ -41,7 +39,6 @@ export interface Workout {
 
 export interface WorkoutExercise {
     id: number;
-    workout: Workout;
     workoutId: number;
     exercise: Exercise;
     exerciseId: number;

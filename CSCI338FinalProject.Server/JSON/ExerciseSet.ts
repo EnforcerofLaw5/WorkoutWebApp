@@ -5,7 +5,6 @@
         repsCompleted: number;
         rpe: number;
         weightUsed: number;
-        workoutExercise: WorkoutExercise;
         timeStamp: Date;
 		
     }
