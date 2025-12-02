@@ -1,2 +1,16 @@
-**/bin/
-**/debug/
+*.user
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# NuGet Packages Directory
+packages/
+
+node_modules/
+.packages
