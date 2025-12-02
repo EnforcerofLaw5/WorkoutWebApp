@@ -4,28 +4,27 @@ namespace CSCI338FinalProject.Server.Data
 {
     public class Suggestion
     {
-        private readonly AppDbContext _context;
+        private readonly AppStore _context;
 
-        public Suggestion(AppDbContext context)
+        public Suggestion(AppStore context)
         {
             _context = context;
         }
 
-        public string SuggestCategory(int userId)
-        {
-            var oneWeekAgo = DateTime.UtcNow.AddDays(-7);
+		public string SuggestCategory(int workoutId)
+		{
+			var oneWeekAgo = DateTime.UtcNow.AddDays(-7);
 
-            var categoryVolumes = _context.WorkoutExercises
-                .Where(we => we.Workout.Id == userId &&
-                             we.Workout.date >= oneWeekAgo)
-                .GroupBy(we => we.Exercise.Category)
-                .Select(g => new
-                {
-                    Category = g.Key,
-                    Volume = g.Sum(x =>
-                        (x.Weight * x.Reps * x.Sets))
-                })
-                .ToList();
+			var workoutIds = _context.Workouts.Where(x => x.date > oneWeekAgo).Select(w => w.Id).ToList();
+
+			var categoryVolumes = _context.WorkoutExercises.Where(x => workoutIds.Contains(x.WorkoutId))
+				.GroupBy(w => w.Exercise.Category).Select(g => new
+				{
+					Category = g.Key,
+					Volume = g.Sum(x =>
+						(x.Weight * x.Reps * x.Sets))
+				});
+
 
             if (!categoryVolumes.Any())
                 return "Full Body";
@@ -34,23 +33,20 @@ namespace CSCI338FinalProject.Server.Data
                                   .First().Category;
         }
 
-        public int SuggestNextWeight(int exerciseId, int userId)
+        public int SuggestNextWeight(int exerciseId, int workoutId)
         {
-            var last3 = _context.WorkoutExercises
-                .Where(we => we.ExerciseId == exerciseId &&
-                             we.Workout.Id == userId)
-                .OrderByDescending(we => we.Workout.date)
-                .Take(3)
-                .ToList();
+			var workoutIds = _context.Workouts.OrderByDescending(o => o.date).Take(3).Select(w => w.Id).ToList();
 
-            if (last3.Count == 0)
+            var last3 = _context.WorkoutExercises.Where(x => workoutIds.Contains(x.Id));
+
+            if (!last3.Any())
                 return 10;
 
             var last = last3.First();
             double avgCompletion = last3.Average(x =>
             {
                 if (x.RepsCompleted == 0)
-                    return 1.0;
+                    return 1;
                 return (double)x.RepsCompleted / x.Reps;
             });
 
@@ -62,16 +58,16 @@ namespace CSCI338FinalProject.Server.Data
 
             return last.Weight;
         }
-        public List<Exercise> SuggestExercisesByCategory(string category, int userId)
+        public List<Exercise> SuggestExercisesByCategory(string category, int workoutId)
         {
             var all = _context.Exercises
                 .Where(e => e.Category == category)
                 .ToList();
             var cutoff = DateTime.UtcNow.AddDays(-3);
+			var workoutIds = _context.Workouts.Where(x => x.Id == workoutId && x.date >= cutoff).Select(w => w.Id).ToList();
 
-            var recentExerciseIds = _context.WorkoutExercises
-                .Where(we => we.Workout.Id == userId &&
-                             we.Workout.date >= cutoff)
+			var recentExerciseIds = _context.WorkoutExercises
+                .Where(we => workoutIds.Contains( we.WorkoutId ))
                 .Select(we => we.ExerciseId)
                 .Distinct()
                 .ToList();
