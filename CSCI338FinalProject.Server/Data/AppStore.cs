@@ -82,7 +82,8 @@ namespace CSCI338FinalProject.Server.Data
                 WorkoutId = 1,
                 ExerciseId = 1,  // Bench Press
                 Sets = 4,
-                Reps = 8
+                Reps = 8,
+                Exercise = Exercises.FirstOrDefault( x => x.Name == "Bench Press")
             });
 
             WorkoutExercises.Add(new WorkoutExercise
@@ -91,8 +92,9 @@ namespace CSCI338FinalProject.Server.Data
                 WorkoutId = 2,
                 ExerciseId = 2,  // Pull Ups
                 Sets = 3,
-                Reps = 10
-            });
+                Reps = 10,
+				Exercise = Exercises.FirstOrDefault(x => x.Name == "Pull Ups")
+			});
 
             WorkoutExercises.Add(new WorkoutExercise
             {
@@ -100,8 +102,9 @@ namespace CSCI338FinalProject.Server.Data
                 WorkoutId = 3,
                 ExerciseId = 3, // Squats
                 Sets = 5,
-                Reps = 5
-            });
+                Reps = 5,
+				Exercise = Exercises.FirstOrDefault(x => x.Name == "Squats")
+			});
 
             WorkoutExercises.Add(new WorkoutExercise
             {
@@ -109,8 +112,9 @@ namespace CSCI338FinalProject.Server.Data
                 WorkoutId = 3,
                 ExerciseId = 4, // Deadlift
                 Sets = 3,
-                Reps = 3
-            });
+                Reps = 3,
+				Exercise = Exercises.FirstOrDefault(x => x.Name == "Deadlift")
+			});
 
             for (int i = 0; i  < Workouts.Count; i++)
             {
