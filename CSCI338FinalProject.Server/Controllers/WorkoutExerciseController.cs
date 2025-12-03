@@ -30,8 +30,9 @@ namespace CSCI338FinalProject.Server.Controllers
             if (workout == null)
                 return NotFound();
 
+			var workoutExercises = _appStore.WorkoutExercises.Where( x =>  x.WorkoutId == workoutId);
 			var results = new List<WorkoutExerciseDetail>();
-			foreach (var workoutExercise in workout.WorkoutExercises)
+			foreach (var workoutExercise in workoutExercises)
 			{
 				if(workoutExercise.Exercise != null)
 				{
