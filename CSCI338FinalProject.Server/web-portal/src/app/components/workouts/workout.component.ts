@@ -31,12 +31,14 @@ export class WorkoutsComponent implements OnInit {
   }
 
   deleteWorkout(id: number) {
+    let that = this;
     this.workoutService.delete(id).subscribe(() => {
       this.workouts = this.workouts.filter(w => w.id != id);
+      that.cdr.detectChanges();
     });
-     //if (!confirm('Delete this workout?')) return;
+    //if (!confirm('Delete this workout?')) return;
 
-     //this.workoutService.delete(id).subscribe(() => {
-     //this.workouts = this.workouts.filter(w => w.id !== id);
+    //this.workoutService.delete(id).subscribe(() => {
+    //this.workouts = this.workouts.filter(w => w.id !== id);
   }
 }

@@ -21,7 +21,7 @@ export class WorkoutDetailComponent implements OnInit {
   suggestedWorkout?: Workout;
   workout?: Workout;
   exercise?: Exercise;
-  exercises: WorkoutExerciseDetail[] =[];
+  exercises: WorkoutExerciseDetail[] = [];
   loading = true;
 
   constructor(
@@ -37,9 +37,10 @@ export class WorkoutDetailComponent implements OnInit {
     this.workoutId = Number(this.route.snapshot.paramMap.get('id'));
     this.workoutExerciseService.getForWorkout(this.workoutId).subscribe({
       next: res => {
-        this.exercises =res;
+        this.exercises = res;
         this.loading = false;
-      }
+      },
+      complete: () => this.cdr.detectChanges()
     })
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -51,15 +52,17 @@ export class WorkoutDetailComponent implements OnInit {
 
   getSuggestion() {
     this.suggestedWorkout = undefined;
-    if (this.workout != null) 
-    this.suggestionService.getSuggestion(this.workout.id).subscribe(s => {
-      this.suggestedWorkout = s.workout;
-    })
+    if (this.workout != null)
+      this.suggestionService.getSuggestion(this.workout.id).subscribe(s => {
+        this.suggestedWorkout = s.workout;
+        this.cdr.detectChanges();
+      })
   }
 
   delete(id: number) {
     this.workoutExerciseService.delete(id).subscribe(() => {
       this.exercises = this.exercises.filter(x => x.id !== id);
+      this.cdr.detectChanges();
     })
   }
 }

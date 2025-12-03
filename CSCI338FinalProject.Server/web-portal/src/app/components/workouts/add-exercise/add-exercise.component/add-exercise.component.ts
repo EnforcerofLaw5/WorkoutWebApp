@@ -22,23 +22,23 @@ import { ActivatedRoute } from '@angular/router';
 export class AddExerciseComponent {
   @Input() workout!: Workout;
 
-    exerciseSearch!: string;
-    searchTerm = new Subject<string>();
-    exercises: Exercise[] = [];
-    apiResults: Exercise[] = [];
-    selectedExercise: Exercise | null = null;
-    form: WorkoutExercise = {
-      workoutId: 0,
-      id: -1,
-      reps: 0,
-      rpe: 0,
-      exerciseId: 0,
-      weight: 0,
-      sets: 0,
-      repsCompleted: 0,
-      exercise: {id: -1, name: '', primaryMuscle: '', category: ''}
+  exerciseSearch!: string;
+  searchTerm = new Subject<string>();
+  exercises: Exercise[] = [];
+  apiResults: Exercise[] = [];
+  selectedExercise: Exercise | null = null;
+  form: WorkoutExercise = {
+    workoutId: 0,
+    id: -1,
+    reps: 0,
+    rpe: 0,
+    exerciseId: 0,
+    weight: 0,
+    sets: 0,
+    repsCompleted: 0,
+    exercise: { id: -1, name: '', primaryMuscle: '', category: '' }
 
-    };
+  };
 
   constructor(
     private weService: WorkoutExerciseService,
@@ -47,7 +47,7 @@ export class AddExerciseComponent {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private workoutService: WorkoutService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('id');
@@ -59,24 +59,31 @@ export class AddExerciseComponent {
       })
     }
 
-  this.searchTerm.pipe(
-    debounceTime(300),          // wait 300ms after the last keystroke
-    distinctUntilChanged(),     // ignore same consecutive values
-    switchMap(term => this.exerciseApi.searchExercises(term))
-  ).subscribe(results => {
-    this.apiResults = results.map(x => ({
-      id: x.id || 0,
-      name: x.name,
-      primaryMuscle: x.primaryMuscle,
-      category: x.category
-    }));
-  });
-}
+    this.searchTerm.pipe(
+      debounceTime(300),          // wait 300ms after the last keystroke
+      distinctUntilChanged(),     // ignore same consecutive values
+      switchMap(term => this.exerciseApi.searchExercises(term))
+    ).subscribe(results => {
+      this.apiResults = results.map(x => ({
+        id: x.id || 0,
+        name: x.name,
+        primaryMuscle: x.primaryMuscle,
+        category: x.category
+      }));
+      this.cdr.detectChanges();
+    });
+  }
 
   save() {
     this.form.workoutId = this.workout.id;
+    this.form.exercise.primaryMuscle = this.selectedExercise?.primaryMuscle || '';
+    this.form.exercise.category = this.selectedExercise?.category || '';
+    this.form.exercise.name = this.selectedExercise?.name || '';
     this.weService.addToWorkout(this.workout.id, this.form)
-    .subscribe(() => window.location.reload());
+      .subscribe(() => {
+        window.location.reload();
+        this.cdr.detectChanges();
+      });
   }
 
   addSelectedExercise() {
@@ -84,7 +91,7 @@ export class AddExerciseComponent {
 
     const payload = {
       workoutId: this.workout.id,
-      exerciseId: this.selectedExercise.id ?? 0,  
+      exerciseId: this.selectedExercise.id ?? 0,
       sets: 3,
       reps: 10
     };
@@ -97,12 +104,13 @@ export class AddExerciseComponent {
       this.workout.workoutExercises.push(added);
       this.selectedExercise = null;
       this.exerciseSearch = "";
+      this.cdr.detectChanges();
     });
   }
 
-selectExercise(ex: Exercise) {
-  this.form.exerciseId = ex.id;
-  this.selectedExercise = ex;
-  this.apiResults = []; 
-}
+  selectExercise(ex: Exercise) {
+    this.form.exerciseId = ex.id;
+    this.selectedExercise = ex;
+    this.apiResults = [];
+  }
 }
