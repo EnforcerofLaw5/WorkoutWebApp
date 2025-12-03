@@ -137,8 +137,11 @@ namespace CSCI338FinalProject.Server.Data
         public WorkoutExercise AddWorkoutExercise(WorkoutExercise we)
         {
             we.Id = WorkoutExercises.Count == 0 ? 1 : WorkoutExercises.Max(x => x.Id) + 1;
-            if(we.Exercise !=  null && we.Exercise.Id < 1)
+            if (we.Exercise != null && we.Exercise.Id < 1)
+            {
                 we.Exercise = AddExercise(we.Exercise);
+                we.ExerciseId = we.Exercise.Id;
+            }
             WorkoutExercises.Add(we);
             return we;
         }
