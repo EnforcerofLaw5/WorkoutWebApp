@@ -35,6 +35,7 @@ export class WorkoutDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.workoutId = Number(this.route.snapshot.paramMap.get('id'));
+    this.exercises = [];
     this.workoutExerciseService.getForWorkout(this.workoutId).subscribe({
       next: res => {
         this.exercises = res;

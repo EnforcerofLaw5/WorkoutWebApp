@@ -4,6 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CSCI338FinalProject.Server.Controllers
 {
+	public class WorkoutExerciseDetail
+	{
+		public int Id { get; set; }
+		public int ExerciseId { get; set; }
+		public string ExerciseName { get; set; }
+		public double Sets { get; set; }
+		public int Reps { get; set; }
+		public string Category {  get; set; }
+		public string PrimaryMuscle { get; set; }
+
+	}
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class WorkoutExerciseController : ControllerBase
@@ -18,22 +30,28 @@ namespace CSCI338FinalProject.Server.Controllers
             if (workout == null)
                 return NotFound();
 
-            var result =
-            (from we in _appStore.WorkoutExercises
-             join ex in _appStore.Exercises on we.ExerciseId equals ex.Id
-             where we.WorkoutId == workoutId
-             select new
-             {
-                 we.Id,
-                 ExerciseId = ex.Id,
-                 ExerciseName = ex.Name,
-                 Sets = we.Sets,
-                 Reps = we.Reps,
-                 Category = ex.Category,
-                 PrimaryMuscle = ex.PrimaryMuscle
-             }).ToList();
+			var workoutExercises = _appStore.WorkoutExercises.Where( x =>  x.Id == workoutId );
 
-            return Ok(result);
+			var results = new List<WorkoutExerciseDetail>();
+			foreach (var workoutExercise in workoutExercises)
+			{
+				if(workoutExercise.Exercise != null)
+				{
+					results.Add(new WorkoutExerciseDetail()
+					{
+						Id = workoutExercise.Id,
+						ExerciseId = workoutExercise.Exercise.Id,
+						ExerciseName = workoutExercise.Exercise.Name,
+						Sets = workoutExercise.Sets,
+						Reps = workoutExercise.Reps,
+						Category = workoutExercise.Exercise.Category,
+						PrimaryMuscle = workoutExercise.Exercise.PrimaryMuscle
+
+					});
+				}
+			}
+
+            return Ok(results);
         }
 
 
