@@ -7,6 +7,7 @@ import { WorkoutEditComponent } from './components/workouts/workout-edit/workout
 export const routes: Routes = [
   { path: '', redirectTo: '/workouts', pathMatch: 'full' },
   { path: 'workouts', component: WorkoutsComponent },
-  { path: 'workouts/edit/:id', component: WorkoutDetailComponent },
+  { path: 'workouts/edit/:id', component: WorkoutEditComponent },
   { path: 'workouts/new', component: WorkoutEditComponent },
+  { path: 'workouts/view/:id', component: WorkoutDetailComponent}
 ];

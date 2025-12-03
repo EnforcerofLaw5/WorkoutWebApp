@@ -10,7 +10,7 @@ namespace CSCI338FinalProject.Server.Models
         public int UserID { get; set; }
         public string Notes { get; set; }
         public DateTime date { get; set; } = DateTime.Now;
-        public required string Name { get; set; }
+        public string Name { get; set; }
         public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
     }
 }

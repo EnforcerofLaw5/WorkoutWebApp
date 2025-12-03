@@ -1,0 +1,41 @@
+<div class="add-exercise-box">
+  <h3>Add Exercise</h3>
+
+  <label>Exercise</label>
+<div class="exercise-search-container">
+  <label for="exerciseSearch">Search Exercise</label>
+  <input 
+    id="exerciseSearch"
+    type="text"
+    placeholder="Start typing to search..."
+    (input)="searchTerm.next($event.target.value)"
+  />
+
+  <div class="search-results" *ngIf="apiResults.length > 0">
+    <div 
+      class="search-result-item"
+      *ngFor="let ex of apiResults"
+      (click)="selectExercise(ex)"
+    >
+      <strong>{{ ex.name }}</strong>
+      <span class="muscle">{{ ex.primaryMuscle }}</span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="form.exerciseId" class="selected-exercise">
+  <h4>Selected Exercise</h4>
+  <p>{{ selectedExercise?.name }} – {{ selectedExercise?.primaryMuscle }}</p>
+</div>
+
+  <label>Sets</label>
+  <input type="number" [(ngModel)]="form.sets">
+
+  <label>Reps</label>
+  <input type="number" [(ngModel)]="form.reps">
+
+  <label>RPE</label>
+  <input type="number" min="1" max="10" [(ngModel)]="form.rpe">
+
+  <button (click)="save()">Add</button>
+</div>

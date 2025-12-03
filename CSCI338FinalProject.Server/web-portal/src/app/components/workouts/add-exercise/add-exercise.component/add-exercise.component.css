@@ -1,0 +1,62 @@
+.add-exercise-box {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.add-exercise-box input,
+.add-exercise-box select {
+  display: block;
+  margin-bottom: 10px;
+  padding: 6px;
+}
+
+.exercise-search-container {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.exercise-search-container input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ddd;
+  background-color: black;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.search-result-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background: lightslategrey;
+}
+
+.muscle {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.selected-exercise {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+

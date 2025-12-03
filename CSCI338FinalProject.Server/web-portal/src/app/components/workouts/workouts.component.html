@@ -1,28 +1,30 @@
-<div class="container mt-4">
-  <h2>Workouts</h2>
+<div class="container">
+  <div class="flex space-between">
+  <h1>Workouts</h1>
+  </div>
 
-  <a class="btn btn-primary mb-3" [routerLink]="['/workouts/new']">
+  <a class="btn btn-primary" [routerLink]="['/workouts/new']">
     + New Workout
   </a>
-
+<div class="card mt">
   @if(loading$) {
   <div>Loading...</div>
   }
   @else {
-  <table class="table table-striped">
+  <table class="table">
     <thead>
       <tr>
+        <th>Name</th>
         <th>Date</th>
-        <th>Notes</th>
         <th style="width: 180px"></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let w of workouts$">
+      <tr *ngFor="let w of workouts">
+        <td>{{ w.name }}</td>
         <td>{{ w.date | dfnsFormat: 'MM/dd/yyyy' }}</td>
-        <td>{{ w.notes }}</td>
         <td>
-          <button class="btn btn-sm btn-info" [routerLink]="['/workouts', w.id]">
+          <button class="btn btn-sm btn-info" [routerLink]="['/workouts/view', w.id]">
             View
           </button>
 
@@ -38,4 +40,5 @@
     </tbody>
   </table>
   }
+  </div>
 </div>

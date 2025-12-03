@@ -1,1 +1,23 @@
-<p>dashboard works!</p>
+<div class="container">
+
+  <h1>Your Dashboard</h1>
+
+  <div class="flex space-between mt">
+
+    <div class="card" style="width: 48%;">
+      <h3>Recent Workouts</h3>
+      <ul>
+        <li *ngFor="let w of recentWorkouts">
+          {{ w.date | date }} — {{ w.notes }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="card" style="width: 48%;">
+      <h3>Weekly Volume</h3>
+      <div id="chart-container">Chart placeholder</div>
+    </div>
+
+  </div>
+
+</div>

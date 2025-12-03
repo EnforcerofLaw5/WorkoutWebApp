@@ -11,26 +11,32 @@ namespace CSCI338FinalProject.Server.Data
             _context = context;
         }
 
-		public string SuggestCategory(int workoutId)
-		{
-			var oneWeekAgo = DateTime.UtcNow.AddDays(-7);
+        public string SuggestCategory(int workoutId)
+        {
+            var oneWeekAgo = DateTime.UtcNow.AddDays(-7);
 
-			var workoutIds = _context.Workouts.Where(x => x.date > oneWeekAgo).Select(w => w.Id).ToList();
+            var workoutIds = _context.Workouts
+                .Where(x => x.date > oneWeekAgo)
+                .Select(w => w.Id)
+                .ToList();
 
-			var categoryVolumes = _context.WorkoutExercises.Where(x => workoutIds.Contains(x.WorkoutId))
-				.GroupBy(w => w.Exercise.Category).Select(g => new
-				{
-					Category = g.Key,
-					Volume = g.Sum(x =>
-						(x.Weight * x.Reps * x.Sets))
-				});
-
+            var categoryVolumes = _context.WorkoutExercises
+                .Where(x => workoutIds.Contains(x.WorkoutId))
+                .GroupBy(w => w.Exercise.Category)
+                .Select(g => new CategoryVolume
+                {
+                    Category = g.Key,
+                    Volume = g.Sum(x => x.Weight * x.Reps * x.Sets)
+                })
+                .ToList();
 
             if (!categoryVolumes.Any())
                 return "Full Body";
 
-            return categoryVolumes.OrderBy(x => x.Volume)
-                                  .First().Category;
+            return categoryVolumes
+                .OrderBy(x => x.Volume)
+                .First()
+                .Category;
         }
 
         public int SuggestNextWeight(int exerciseId, int workoutId)
@@ -81,6 +87,7 @@ namespace CSCI338FinalProject.Server.Data
         {
             var category = SuggestCategory(userId);
             var exercises = SuggestExercisesByCategory(category, userId);
+
             var workout = new Workout
             {
                 UserID = userId,

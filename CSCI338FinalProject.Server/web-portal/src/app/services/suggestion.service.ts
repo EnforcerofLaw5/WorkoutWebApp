@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SuggestionService {
-  private baseUrl = 'https://localhost:7135/api/suggestions';
+  private baseUrl = 'https://localhost:7114/api/workout/suggest';
 
   constructor(private http: HttpClient) { }
 

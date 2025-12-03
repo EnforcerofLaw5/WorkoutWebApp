@@ -19,10 +19,10 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(workouts);
         }
 
-        [HttpGet("suggest/{userId}")]
-        public async Task<ActionResult<Workout>> GetSuggestion(int userId, [FromServices] Suggestion svc)
+        [HttpGet("suggest/{workoutid}")]
+        public async Task<ActionResult<Workout>> GetSuggestion(int workoutid, [FromServices] Suggestion svc)
         {
-            var suggestion = await svc.SuggestWorkout(userId);
+            var suggestion = await svc.SuggestWorkout(workoutid);
             return Ok(suggestion);
         }
 
@@ -38,6 +38,19 @@ namespace CSCI338FinalProject.Server.Controllers
         {
             var created = this._appStore.AddWorkOut(workout);
 			            return Ok(created);
+        }
+
+        [HttpPost("{workoutId}")]
+        public IActionResult AddToWorkout(int workoutId, WorkoutExercise exercise)
+        {
+            var workout = _appStore.Workouts.FirstOrDefault(w => w.Id == workoutId);
+            if (workout == null)
+            {
+                return NotFound();
+            }
+            var added = _appStore.AddWorkoutExercise(exercise);
+            workout.WorkoutExercises.Add(added);
+            return Ok(added);
         }
 
         [HttpPut("{id}")]

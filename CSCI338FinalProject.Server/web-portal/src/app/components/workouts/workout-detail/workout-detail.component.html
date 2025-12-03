@@ -1,9 +1,48 @@
-<h2>Workout Detail</h2>
+<div class="container">
+  <div class="card">
+<h2>Workout Details</h2>
 
 <div *ngIf="workout">
-  <p><strong>Date:</strong> {{ workout.date }}</p>
+  <p><strong>Name: </strong> {{ workout.name }}</p>
+  <p><strong>Type: </strong> {{ workout.type }}</p>
+  <p><strong>Date:</strong> {{ workout.date | dfnsFormat: 'MM/dd/yyyy' }}</p>
   <p><strong>Notes:</strong> {{ workout.notes }}</p>
 
-  <button class="btn btn-primary" (click)="edit()">Edit</button>
-  <button class="btn btn-secondary" routerLink="/workouts">Back</button>
+  <table *ngIf="!loading && exercises.length > 0" class="exercise-table">
+    <thead>
+      <tr>
+        <th>Exercise</th>
+        <th>Muscle</th>
+        <th>Category</th>
+        <th>Sets</th>
+        <th>Reps</th>
+        <th style="width: 100px"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let ex of exercises">
+        <td>{{ ex.exerciseName }}</td>
+        <td>{{ ex.primaryMuscle }}</td>
+        <td>{{ ex.category }}</td>
+        <td>{{ ex.sets }}</td>
+        <td>{{ ex.reps }}</td>
+        <td>
+          <button class=" btn btn-delete btn-danger" (click)="delete(ex.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <section class="suggestions">
+    <h3>Suggested Workout</h3>
+    <button class="btn btn-primary" (click)="getSuggestion()">Generate Suggestions</button>
+    @if (suggestedWorkout) {
+      <p>{{ suggestedWorkout.workoutExercises }}</p>
+    }
+  </section>
+
+  <button class="btn btn-primary mt" routerLink="/workouts">Back</button>
+</div>
+</div>
 </div>

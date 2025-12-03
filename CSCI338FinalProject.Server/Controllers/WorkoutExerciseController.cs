@@ -11,17 +11,33 @@ namespace CSCI338FinalProject.Server.Controllers
 		private readonly AppStore _appStore;
 		public WorkoutExerciseController(AppStore context) => _appStore = context;
 
-		[HttpGet("workout/{workoutId}")]
-		public IActionResult GetExercisesForWorkout(int workoutId)
-		{
-			var workout = _appStore.Workouts.FirstOrDefault(x => x.Id == workoutId);
-			if (workout == null)
-				return NotFound();
-			else
-				return Ok(workout.WorkoutExercises);
-		}
+        [HttpGet("workout/{workoutId}")]
+        public IActionResult GetExercisesForWorkout(int workoutId)
+        {
+            var workout = _appStore.Workouts.FirstOrDefault(x => x.Id == workoutId);
+            if (workout == null)
+                return NotFound();
 
-		[HttpGet("{id}")]
+            var result =
+            (from we in _appStore.WorkoutExercises
+             join ex in _appStore.Exercises on we.ExerciseId equals ex.Id
+             where we.WorkoutId == workoutId
+             select new
+             {
+                 we.Id,
+                 ExerciseId = ex.Id,
+                 ExerciseName = ex.Name,
+                 Sets = we.Sets,
+                 Reps = we.Reps,
+                 Category = ex.Category,
+                 PrimaryMuscle = ex.PrimaryMuscle
+             }).ToList();
+
+            return Ok(result);
+        }
+
+
+        [HttpGet("{id}")]
 		public IActionResult GetWorkoutExercise(int id)
 		{
 			var item = _appStore.WorkoutExercises.FirstOrDefault(x => x.Id == id);

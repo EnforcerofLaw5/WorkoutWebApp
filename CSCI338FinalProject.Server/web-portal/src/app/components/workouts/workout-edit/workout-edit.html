@@ -1,7 +1,18 @@
+<div class="container">
 <h2>{{ isEdit ? 'Edit Workout' : 'New Workout' }}</h2>
 
 <form (ngSubmit)="save()">
 
+  <div>
+    <label>Name:</label>
+    <input type="name" [(ngModel)]="workout.name" name="name" required>
+  </div>
+
+  <div>
+    <label>Type:</label>
+    <input type="type" [(ngModel)]="workout.type" name="type" required>
+  </div>
+  
   <div>
     <label>Date:</label>
     <input type="date" [(ngModel)]="workout.date" name="date" required>
@@ -12,9 +23,13 @@
     <textarea [(ngModel)]="workout.notes" name="notes"></textarea>
   </div>
 
-  <button type="submit" class="btn btn-primary">
+  <add-exercise-form [workout]="workout"></add-exercise-form>
+
+
+  <button type="submit" class="btn btn-success mt">
     {{ isEdit ? 'Update' : 'Create' }}
   </button>
 
-  <button routerLink="/workouts" class="btn btn-secondary">Cancel</button>
+  <button routerLink="/workouts" class="btn btn-danger mt">Cancel</button>
 </form>
+</div>

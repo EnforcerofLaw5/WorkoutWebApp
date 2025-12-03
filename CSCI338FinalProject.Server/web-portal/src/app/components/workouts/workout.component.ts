@@ -15,7 +15,7 @@ import { DateFnsModule } from 'ngx-date-fns';
 })
 export class WorkoutsComponent implements OnInit {
 
-  protected workouts$: Workout[] = [];
+  protected workouts: Workout[] = [];
   protected loading$ = true;
 
   constructor(private workoutService: WorkoutService, private cdr: ChangeDetectorRef) { }
@@ -24,17 +24,19 @@ export class WorkoutsComponent implements OnInit {
     let that = this;
 
     that.workoutService.getAll().subscribe((ws) => {
-      that.workouts$ = ws;
+      that.workouts = ws;
       that.loading$ = false;
       that.cdr.detectChanges();
     });
   }
 
   deleteWorkout(id: number) {
-    // if (!confirm('Delete this workout?')) return;
+    this.workoutService.delete(id).subscribe(() => {
+      this.workouts = this.workouts.filter(w => w.id != id);
+    });
+     //if (!confirm('Delete this workout?')) return;
 
-    // this.workoutService.delete(id).subscribe(() => {
-    //   this.workouts = this.workouts.filter(w => w.id !== id);
-    // });
+     //this.workoutService.delete(id).subscribe(() => {
+     //this.workouts = this.workouts.filter(w => w.id !== id);
   }
 }
