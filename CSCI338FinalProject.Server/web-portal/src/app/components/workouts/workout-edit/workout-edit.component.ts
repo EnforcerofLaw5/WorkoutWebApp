@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { WorkoutService } from '../../../services/workout.service';
-import { Workout, Exercise, WorkoutExercise } from '../../../entities';
+import { Workout, Exercise } from '../../../entities';
 import { AddExerciseComponent } from '../add-exercise/add-exercise.component/add-exercise.component';
 import { HttpClient } from '@angular/common/http';
 import { ExerciseApiService } from '../../../services/exercise-api.service';
@@ -22,12 +22,13 @@ import { ExerciseApiService } from '../../../services/exercise-api.service';
 export class WorkoutEditComponent implements OnInit {
 
   workoutId!: number;
-  workout!: Workout;
   exercises: Exercise[] = [];
   selectedExercise: Exercise | null = null;
+  apiResults: Exercise[] = [];
+  searchQuery: string = '';
 
   isEdit = false;
-  //protected workout: Workout = { id: 0, name: '', type: '', date: new Date(), user: { id: 0, name: '', age: 0, weight: 0, goal: '', workouts: [] }, userID: 0, notes: '', workoutExercises: [] };
+  protected workout: Workout = { id: 0, name: '', type: '', date: new Date(), user: { id: 0, name: '', age: 0, weight: 0, goal: '', workouts: [] }, userID: 0, notes: '', workoutExercises: [] };
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +41,7 @@ export class WorkoutEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.exerciseApi.getExercises().subscribe(data => {
-   this.exercises = data.map(x => ({
+    this.exercises = data.map(x => ({
     id: 0,
     name: x.name,
     primaryMuscle: x.primaryMuscle,
@@ -71,6 +72,22 @@ export class WorkoutEditComponent implements OnInit {
     }
   }
 
+  searchExercises() {
+  const q = this.searchQuery.trim();
+  if (!q) {
+    this.apiResults = [];
+    return;
+  }
+
+  this.exerciseApi.searchExercises(q).subscribe(res => {
+    this.apiResults = res.map(x => ({
+      id: 0,
+      name: x.name,
+      primaryMuscle: x.primaryMuscle,
+      category: x.category
+    }));
+  });
+}
 
   removeExercise(exerciseId: number) {
     this.http.delete(`https://localhost:7114/api/workoutexercise/${exerciseId}`).subscribe(() => {

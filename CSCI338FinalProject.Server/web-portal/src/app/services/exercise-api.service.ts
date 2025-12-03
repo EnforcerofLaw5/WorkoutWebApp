@@ -4,13 +4,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Exercise } from '../entities';
 
-
 @Injectable({ providedIn: 'root' })
 export class ExerciseApiService {
 
-    private readonly baseUrl = 'https://api.api-ninjas.com/v1/exercises';
+  private readonly baseUrl = 'https://api.api-ninjas.com/v1/exercises';
   private readonly headers = new HttpHeaders({
-    'X-Api-Key': '8RnxQIAUQmtmC3teRrd6ZQ==TOxl3qzAnUvsXGKT' 
+    'X-Api-Key': '8RnxQIAUQmtmC3teRrd6ZQ==TOxl3qzAnUvsXGKT'   
   });
 
   constructor(private http: HttpClient) {}
@@ -42,5 +41,4 @@ export class ExerciseApiService {
         )
       );
   }
-
 }

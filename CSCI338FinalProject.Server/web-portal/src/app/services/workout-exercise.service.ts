@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { WorkoutExerciseDetail } from '../models/workout-exercise';
+import { Workout } from '../entities';
 
 export interface WorkoutExercise {
   id: number;
@@ -42,7 +43,7 @@ export class WorkoutExerciseService {
     return this.http.get<WorkoutExerciseDetail[]>(`${this.baseUrl}/workout/${workoutId}`)
   }
 
-  addToWorkout(workoutId: number, data: any) {
-    return this.http.post(`${this.baseUrl}/workout/${workoutId}`, data);
+  addToWorkout(workoutId: number, data: WorkoutExercise) {
+    return this.http.post(`https://localhost:7114/api/workout/${workoutId}`, data);
   }
 }

@@ -22,7 +22,7 @@ export class WorkoutService {
   }
 
   update = (id: number, workout: Workout) => {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, workout);
+    return this.http.put<Workout>(`${this.baseUrl}/${id}`, workout);
   }
 
   delete = (id: number) => {

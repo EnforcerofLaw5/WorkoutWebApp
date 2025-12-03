@@ -20,7 +20,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class AddExerciseComponent {
-  @Input() workoutId!: number;
   @Input() workout!: Workout;
 
     exerciseSearch!: string;
@@ -28,12 +27,18 @@ export class AddExerciseComponent {
     exercises: Exercise[] = [];
     apiResults: Exercise[] = [];
     selectedExercise: Exercise | null = null;
-    form = {
-    exerciseId: 0,
-    sets: 0,
-    reps: 0,
-    rpe: 1
-  };
+    form: WorkoutExercise = {
+      workoutId: 0,
+      id: -1,
+      reps: 0,
+      rpe: 0,
+      exerciseId: 0,
+      weight: 0,
+      sets: 0,
+      repsCompleted: 0,
+      exercise: {id: -1, name: '', primaryMuscle: '', category: ''}
+
+    };
 
   constructor(
     private weService: WorkoutExerciseService,
@@ -66,12 +71,11 @@ export class AddExerciseComponent {
       category: x.category
     }));
   });
-
-    this.http.get<any[]>('/api/exercise').subscribe(x => this.exercises = x);
 }
 
   save() {
-    this.weService.addToWorkout(this.workoutId, this.form)
+    this.form.workoutId = this.workout.id;
+    this.weService.addToWorkout(this.workout.id, this.form)
     .subscribe(() => window.location.reload());
   }
 
