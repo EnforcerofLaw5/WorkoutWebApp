@@ -5,7 +5,7 @@ import { WorkoutService } from '../../../services/workout.service';
 import { Workout } from '../../../entities';
 import { Exercise } from '../../../entities';
 import { SuggestionService } from '../../../services/suggestion.service';
-import { WorkoutExerciseService } from '../../../services/workout-exercise.service';
+import { WorkoutExerciseService } from '../../../services/exercise.service';
 import { WorkoutExerciseDetail } from '../../../models/workout-exercise';
 import { enUS } from 'date-fns/locale';
 import { DateFnsModule, IsThisHourPipeModule } from 'ngx-date-fns';

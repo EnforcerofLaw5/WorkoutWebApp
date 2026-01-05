@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { WorkoutExerciseService } from '../../../../services/workout-exercise.service';
+import { WorkoutExerciseService } from '../../../../services/exercise.service';
 import { HttpClient } from '@angular/common/http';
 import { ExerciseApiService } from '../../../../services/exercise-api.service';
 import { WorkoutService } from '../../../../services/workout.service';

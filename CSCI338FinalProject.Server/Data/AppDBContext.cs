@@ -10,20 +10,19 @@ namespace CSCI338FinalProject.Server.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<Exercise> Exercises => Set<Exercise>();
         public DbSet<Workout> Workouts => Set<Workout>();
-        public DbSet<WorkoutExercise> WorkoutExercises => Set<WorkoutExercise>();
         public DbSet<ExerciseSet> ExerciseSets => Set<ExerciseSet>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()
-                .HasKey( p => p.Id);
+                .HasMany(w => w.Workouts);
 
             modelBuilder.Entity<Workout>()
-            .HasKey(p => p.Id);
+            .HasMany(e => e.Exercises);
 
-            modelBuilder.Entity<WorkoutExercise>()
-            .HasKey(p => p.Id);
+            modelBuilder.Entity<Exercise>()
+                .HasMany(e => e.ExerciseSets);
         }
     }
 }

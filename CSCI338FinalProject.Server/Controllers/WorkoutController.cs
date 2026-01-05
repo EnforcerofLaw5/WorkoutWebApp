@@ -1,6 +1,7 @@
 ﻿using CSCI338FinalProject.Server.Data;
 using CSCI338FinalProject.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CSCI338FinalProject.Server.Controllers
@@ -9,54 +10,49 @@ namespace CSCI338FinalProject.Server.Controllers
     [ApiController]
     public class WorkoutController : ControllerBase
     {
-        private readonly AppStore _appStore;
-        public WorkoutController(AppStore appStore) => _appStore = appStore;
+        private readonly AppDbContext _context;
+        public WorkoutController(AppDbContext context) => _context = context;
 
         [HttpGet]
-        public IActionResult GetAllWorkouts() 
+        public async Task<IActionResult> GetAllWorkouts() 
         {
-            var workouts = _appStore.Workouts;
+            var workouts = await _context.Workouts.ToListAsync();
             return Ok(workouts);
         }
 
-        [HttpGet("suggest/{workoutid}")]
-        public async Task<ActionResult<Workout>> GetSuggestion(int workoutid, [FromServices] Suggestion svc)
-        {
-            var suggestion = await svc.SuggestWorkout(workoutid);
-            return Ok(suggestion);
-        }
-
         [HttpGet("{id}")]
-        public IActionResult GetWorkoutById(int id)
+        public async Task<IActionResult> GetWorkoutById(int id)
         {
-            var workout= this._appStore.Workouts.Where( x => x.Id == id).FirstOrDefault();
+            var workout = await _context.Workouts.FindAsync(id);
                         return Ok(workout);
         }
          
         [HttpPost]
-        public IActionResult Create(Workout workout)
+        public async Task<IActionResult> Create(Workout workout)
         {
-            var created = this._appStore.AddWorkOut(workout);
-			            return Ok(created);
+            _context.Add(workout);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetWorkoutById), new { id = workout.Id }, workout);
         }
 
         [HttpPost("{workoutId}")]
-        public IActionResult AddToWorkout(int workoutId, WorkoutExercise exercise)
+        public IActionResult AddToWorkout(int workoutId, Exercise exercise)
         {
-            var workout = _appStore.Workouts.FirstOrDefault(w => w.Id == workoutId);
+            var workout = GetWorkoutById(workoutId);
             if (workout == null)
             {
                 return NotFound();
             }
-            var added = _appStore.AddWorkoutExercise(exercise);
-            workout.WorkoutExercises.Add(added);
+            exercise.WorkoutId = workoutId;
+            var added = _context.Exercises.Add(exercise);
+            _context.SaveChanges();
             return Ok(added);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateWorkout(int id, Workout workout)
+        public async Task<IActionResult> UpdateWorkout(int id, Workout workout)
         {
-            var updateWorkout = _appStore.Workouts.FirstOrDefault( x => x.Id == id);
+            var updateWorkout = await _context.Workouts.FindAsync(id);
             if (updateWorkout == null)
             {
                 return NotFound();
@@ -64,15 +60,18 @@ namespace CSCI338FinalProject.Server.Controllers
             updateWorkout.Type = workout.Type;
             updateWorkout.Notes = workout.Notes;
             updateWorkout.date = workout.date;
+            updateWorkout.Name = workout.Name;
+            await _context.SaveChangesAsync();
             return Ok(updateWorkout);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteWorkout(int id)
+        public async Task<IActionResult> DeleteWorkout(int id)
         {
-            var workout = _appStore.Workouts.FirstOrDefault(x => x.Id == id);
-            if(workout != null)
-                this._appStore.Workouts.Remove(workout);
+            var workout = await _context.Workouts.FindAsync(id);
+            if (workout == null) { return NotFound(); }
+            _context.Remove(workout);
+            await _context.SaveChangesAsync();
             return Ok();
         }
     }

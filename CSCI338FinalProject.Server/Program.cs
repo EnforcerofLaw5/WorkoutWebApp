@@ -4,18 +4,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(11, 0, 0)) 
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
 
 builder.Services.AddControllers();
-
-builder.Services.AddScoped<Suggestion>();
-builder.Services.AddSingleton<AppStore>();
 
 builder.Services.AddCors(options =>
 {
