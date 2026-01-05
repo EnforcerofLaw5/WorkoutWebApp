@@ -8,5 +8,6 @@
         public double Rpe { get; set; }
         public double WeightUsed { get; set; }
         public DateTime TimeStamp { get; set; } = DateTime.Now;
+        public Exercise Exercise { get; set; }
     }
 }

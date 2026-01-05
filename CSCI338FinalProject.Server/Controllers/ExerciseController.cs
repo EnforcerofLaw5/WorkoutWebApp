@@ -24,12 +24,18 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(exercise);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Exercise exercise)
+        [HttpPost("workouts/{workoutId}/exercises")]
+        public async Task<IActionResult> Create(int workoutId)
         {
-            _context.Add(exercise);
+            var workout = await _context.Exercises.FirstOrDefaultAsync(w =>  w.Id == workoutId);
+            if (workout == null) { return NotFound("Workout not found"); }
+            var exercise = new Exercise
+            {
+                WorkoutId = workoutId
+            };
+            _context.Exercises.Add(exercise);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetExerciseById), new { id = exercise.Id }, exercise);
+            return Ok();
         }
 
         [HttpPost("{exerciseId}")]
@@ -46,13 +52,13 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(added);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateExercise(int id, Exercise exercise)
+        [HttpPut("workout/{workoutId}/exercises/{id}")]
+        public async Task<IActionResult> UpdateExercise(int id, int workoutId, Exercise exercise)
         {
-            var updateExercise = await _context.Exercises.FindAsync(id);
+            var updateExercise = await _context.Exercises.Include(w => w.Workout).FirstOrDefaultAsync(e => e.Id == id && e.WorkoutId == workoutId);
             if (updateExercise == null)
             {
-                return NotFound();
+                return NotFound("Workout not found for this exercise");
             }
             updateExercise.PrimaryMuscle = exercise.PrimaryMuscle;
             updateExercise.Category = exercise.Category;
@@ -69,12 +75,6 @@ namespace CSCI338FinalProject.Server.Controllers
             _context.Remove(exercise);
             await _context.SaveChangesAsync();
             return Ok();
-        }
-
-        [HttpPost("{exerciseId}/sets")]
-        public async Task<IActionResult> AddSet(int exerciseId, ExerciseSet exerciseSet)
-        {
-            var 
         }
     }
 }

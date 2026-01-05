@@ -27,12 +27,18 @@ namespace CSCI338FinalProject.Server.Controllers
                         return Ok(workout);
         }
          
-        [HttpPost]
-        public async Task<IActionResult> Create(Workout workout)
+        [HttpPost("users/{userId}/workouts")]
+        public async Task<IActionResult> Create(int userId)
         {
-            _context.Add(workout);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) { return NotFound("User not found"); }
+            var workout = new Workout
+            {
+                UserID = userId
+            };
+            _context.Workouts.Add(workout);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetWorkoutById), new { id = workout.Id }, workout);
+            return Ok();
         }
 
         [HttpPost("{workoutId}")]
@@ -49,14 +55,11 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(added);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWorkout(int id, Workout workout)
+        [HttpPut("users/{userId}/workouts/{id}")]
+        public async Task<IActionResult> UpdateWorkout(int id, int userId, Workout workout)
         {
-            var updateWorkout = await _context.Workouts.FindAsync(id);
-            if (updateWorkout == null)
-            {
-                return NotFound();
-            }
+            var updateWorkout = await _context.Workouts.Include(u => u.User).FirstOrDefaultAsync(w =>  w.Id == id && w.UserID == userId);
+            if (updateWorkout == null) { return NotFound("User not found for this workout"); }
             updateWorkout.Type = workout.Type;
             updateWorkout.Notes = workout.Notes;
             updateWorkout.date = workout.date;

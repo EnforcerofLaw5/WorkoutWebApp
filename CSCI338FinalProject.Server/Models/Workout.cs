@@ -11,5 +11,6 @@ namespace CSCI338FinalProject.Server.Models
         public DateTime date { get; set; } = DateTime.Now;
         public string Name { get; set; }
         public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+        public User User { get; set; }
     }
 }
