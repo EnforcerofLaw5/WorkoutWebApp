@@ -1,18 +1,21 @@
 export interface Exercise {
     id: number;
+    workoutId: number;
     name: string;
     primaryMuscle: string;
     category: string;
-
+    exerciseSets: ExerciseSet[];
+    workout?: Workout;
 }
 
 export interface ExerciseSet {
     id: number;
-    workoutExerciseId: number;
+    exerciseId: number;
     repsCompleted: number;
     rpe: number;
     weightUsed: number;
     timeStamp: Date;
+    exercise?: Exercise;
 }
 
 export interface User {
@@ -21,31 +24,17 @@ export interface User {
     age: number;
     weight: number;
     goal: string;
-    workouts: Workout[];
+    workouts?: Workout[];
 
 }
 
 export interface Workout {
     id: number;
     type: string;
-    user: User;
+    user?: User;
     userID: number;
     notes: string;
     date: Date;
     name: string;
-    workoutExercises: WorkoutExercise[];
-
-}
-
-export interface WorkoutExercise {
-    id: number;
-    workoutId: number;
-    exercise: Exercise;
-    exerciseId: number;
-    rpe: number;
-    weight: number;
-    reps: number;
-    repsCompleted: number;
-    sets: number;
-
+    exercises: Exercise[];
 }

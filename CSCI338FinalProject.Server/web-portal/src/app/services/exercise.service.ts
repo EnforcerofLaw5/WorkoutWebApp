@@ -17,12 +17,12 @@ export class ExerciseService {
     return this.http.get<Exercise[]>(`${this.baseUrl}/${id}`);
   }
 
-  create(exercise: Exercise): Observable<Exercise[]> {
-    return this.http.post<Exercise[]>(this.baseUrl, exercise);
+  create(workoutId: number): Observable<Exercise[]> {
+    return this.http.post<Exercise[]>(`${this.baseUrl}/workouts/${workoutId}/exercises`, workoutId);
   }
 
-  update(id: number, exercise: Exercise): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, exercise);
+  update(id: number, workoutId: number, exercise: Exercise): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/workout/${workoutId}/exercises/${id}`, exercise);
   }
 
   delete(id: number): Observable<void> {
@@ -30,6 +30,6 @@ export class ExerciseService {
   }
 
   addToExercise(exerciseId: number, exerciseSet: ExerciseSet) {
-    return this.http.post(`https://localhost:7114/api/workout/${exerciseId}`, exerciseSet);
+    return this.http.post(`${this.baseUrl}/${exerciseId}`, exerciseSet);
   }
 }

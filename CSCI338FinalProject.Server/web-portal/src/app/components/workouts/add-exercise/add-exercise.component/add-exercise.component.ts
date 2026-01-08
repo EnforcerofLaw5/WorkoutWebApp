@@ -1,11 +1,10 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { WorkoutExerciseService } from '../../../../services/exercise.service';
 import { HttpClient } from '@angular/common/http';
 import { ExerciseApiService } from '../../../../services/exercise-api.service';
 import { WorkoutService } from '../../../../services/workout.service';
-import { Exercise, Workout, WorkoutExercise } from '../../../../entities';
+import { Exercise, Workout } from '../../../../entities';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -27,21 +26,14 @@ export class AddExerciseComponent {
   exercises: Exercise[] = [];
   apiResults: Exercise[] = [];
   selectedExercise: Exercise | null = null;
-  form: WorkoutExercise = {
-    workoutId: 0,
-    id: -1,
-    reps: 0,
-    rpe: 0,
-    exerciseId: 0,
-    weight: 0,
-    sets: 0,
-    repsCompleted: 0,
-    exercise: { id: -1, name: '', primaryMuscle: '', category: '' }
-
-  };
+  exerciseSetForm = {
+  reps: 0,
+  rpe: 0,
+  weightUsed: 0,
+  repsCompleted: 0
+};
 
   constructor(
-    private weService: WorkoutExerciseService,
     private http: HttpClient,
     private exerciseApi: ExerciseApiService,
     private route: ActivatedRoute,
@@ -96,7 +88,7 @@ export class AddExerciseComponent {
       reps: 10
     };
 
-    this.http.post<WorkoutExercise>(
+    this.http.post<Exercise>(
       "https://localhost:7114/api/workoutexercise",
       payload
     ).subscribe(added => {

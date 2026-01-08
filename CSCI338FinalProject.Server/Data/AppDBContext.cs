@@ -16,13 +16,22 @@ namespace CSCI338FinalProject.Server.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()
-                .HasMany(w => w.Workouts);
+                .HasMany(w => w.Workouts)
+                .WithOne(u => u.User)
+                .HasForeignKey(u => u.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Workout>()
-            .HasMany(e => e.Exercises);
+            .HasMany(e => e.Exercises)
+            .WithOne(w => w.Workout)
+            .HasForeignKey(w => w.WorkoutId)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Exercise>()
-                .HasMany(e => e.ExerciseSets);
+                .HasMany(e => e.ExerciseSets)
+                .WithOne(e => e.Exercise)
+                .HasForeignKey(e => e.ExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
