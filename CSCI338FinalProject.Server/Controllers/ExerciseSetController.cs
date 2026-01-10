@@ -24,7 +24,7 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(exerciseSet);
         }
 
-        [HttpPost("exercises/{exerciseId}/sets")]
+        [HttpPost("exercises/{exerciseId}")]
         public async Task<IActionResult> Create(int exerciseId)
         {
             var exercise = await _context.Exercises.FirstOrDefaultAsync(s => s.Id == exerciseId);

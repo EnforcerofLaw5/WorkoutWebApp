@@ -18,7 +18,7 @@ export class ExerciseService {
   }
 
   create(workoutId: number): Observable<Exercise[]> {
-    return this.http.post<Exercise[]>(`${this.baseUrl}/workouts/${workoutId}/exercises`, workoutId);
+    return this.http.post<Exercise[]>(`${this.baseUrl}/workouts/${workoutId}`, workoutId);
   }
 
   update(id: number, workoutId: number, exercise: Exercise): Observable<void> {

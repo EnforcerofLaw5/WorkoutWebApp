@@ -27,7 +27,7 @@ namespace CSCI338FinalProject.Server.Controllers
                         return Ok(workout);
         }
          
-        [HttpPost("users/{userId}/workouts")]
+        [HttpPost("users/{userId}")]
         public async Task<IActionResult> Create(int userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -50,9 +50,9 @@ namespace CSCI338FinalProject.Server.Controllers
                 return NotFound();
             }
             exercise.WorkoutId = workoutId;
-            var added = _context.Exercises.Add(exercise);
+            _context.Exercises.Add(exercise);
             _context.SaveChanges();
-            return Ok(added);
+            return Ok(exercise);
         }
 
         [HttpPut("users/{userId}/workouts/{id}")]

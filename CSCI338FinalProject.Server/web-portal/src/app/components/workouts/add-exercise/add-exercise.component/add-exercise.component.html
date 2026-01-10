@@ -23,19 +23,9 @@
   </div>
 </div>
 
-<div *ngIf="form.exerciseId" class="selected-exercise">
+<div *ngIf="selectedExercise" class="selected-exercise">
   <h4>Selected Exercise</h4>
-  <p>{{ selectedExercise?.name }} – {{ selectedExercise?.primaryMuscle }}</p>
+  <p>{{ selectedExercise.name }} – {{ selectedExercise.primaryMuscle }}</p>
 </div>
-
-  <label>Sets</label>
-  <input type="number" [(ngModel)]="form.sets">
-
-  <label>Reps</label>
-  <input type="number" [(ngModel)]="form.reps">
-
-  <label>RPE</label>
-  <input type="number" min="1" max="10" [(ngModel)]="form.rpe">
-
-  <button (click)="save()">Add</button>
+  <button (click)="addExercise()">Add</button>
 </div>

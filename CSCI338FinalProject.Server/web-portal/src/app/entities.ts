@@ -24,7 +24,7 @@ export interface User {
     age: number;
     weight: number;
     goal: string;
-    workouts?: Workout[];
+    workouts: Workout[];
 
 }
 

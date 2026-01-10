@@ -2,13 +2,10 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkoutService } from '../../../services/workout.service';
+import { ExerciseService } from '../../../services/exercise.service';
 import { Workout } from '../../../entities';
-import { Exercise } from '../../../entities';
 import { SuggestionService } from '../../../services/suggestion.service';
-import { WorkoutExerciseService } from '../../../services/exercise.service';
-import { WorkoutExerciseDetail } from '../../../models/workout-exercise';
-import { enUS } from 'date-fns/locale';
-import { DateFnsModule, IsThisHourPipeModule } from 'ngx-date-fns';
+import { DateFnsModule } from 'ngx-date-fns';
 
 @Component({
   selector: 'app-workout-detail',
@@ -17,53 +14,54 @@ import { DateFnsModule, IsThisHourPipeModule } from 'ngx-date-fns';
   templateUrl: './workout-detail.component.html'
 })
 export class WorkoutDetailComponent implements OnInit {
+
   workoutId!: number;
-  suggestedWorkout?: Workout;
   workout?: Workout;
-  exercise?: Exercise;
-  exercises: WorkoutExerciseDetail[] = [];
+  suggestedWorkout?: Workout;
   loading = true;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private workoutService: WorkoutService,
-    private cdr: ChangeDetectorRef,
+    private exersiceService: ExerciseService,
     private suggestionService: SuggestionService,
-    private workoutExerciseService: WorkoutExerciseService
-  ) { }
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.workoutId = Number(this.route.snapshot.paramMap.get('id'));
-    this.exercises = [];
-    this.workoutExerciseService.getForWorkout(this.workoutId).subscribe({
-      next: res => {
-        this.exercises = res;
+    this.loadWorkout();
+  }
+
+  loadWorkout() {
+    this.loading = true;
+
+    this.workoutService.get(this.workoutId).subscribe({
+      next: w => {
+        this.workout = w;
         this.loading = false;
       },
       complete: () => this.cdr.detectChanges()
-    })
-
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.workoutService.get(id).subscribe(w => {
-      this.workout = w;
-      this.cdr.detectChanges();
     });
   }
 
   getSuggestion() {
     this.suggestedWorkout = undefined;
-    if (this.workout != null)
-      this.suggestionService.getSuggestion(this.workout.id).subscribe(s => {
-        this.suggestedWorkout = s.workout;
-        this.cdr.detectChanges();
-      })
+    if (!this.workout) return;
+
+    this.suggestionService.getSuggestion(this.workout.id).subscribe(s => {
+      this.suggestedWorkout = s.workout;
+      this.cdr.detectChanges();
+    });
   }
 
-  delete(id: number) {
-    this.workoutExerciseService.delete(id).subscribe(() => {
-      this.exercises = this.exercises.filter(x => x.id !== id);
+  deleteExercise(exerciseId: number) {
+    if (!this.workout) return;
+
+    this.exersiceService.delete(exerciseId).subscribe(() => {
+      this.workout!.exercises = this.workout!.exercises.filter(e => e.id !== exerciseId);
       this.cdr.detectChanges();
-    })
+    });
   }
 }

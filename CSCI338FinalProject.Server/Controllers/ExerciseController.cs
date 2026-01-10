@@ -24,7 +24,7 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(exercise);
         }
 
-        [HttpPost("workouts/{workoutId}/exercises")]
+        [HttpPost("workouts/{workoutId}")]
         public async Task<IActionResult> Create(int workoutId)
         {
             var workout = await _context.Exercises.FirstOrDefaultAsync(w =>  w.Id == workoutId);
