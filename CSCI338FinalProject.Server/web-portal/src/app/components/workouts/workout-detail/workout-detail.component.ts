@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkoutService } from '../../../services/workout.service';
 import { ExerciseService } from '../../../services/exercise.service';
@@ -10,7 +10,7 @@ import { DateFnsModule } from 'ngx-date-fns';
 @Component({
   selector: 'app-workout-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, DateFnsModule],
+  imports: [RouterModule, DateFnsModule],
   templateUrl: './workout-detail.component.html'
 })
 export class WorkoutDetailComponent implements OnInit {

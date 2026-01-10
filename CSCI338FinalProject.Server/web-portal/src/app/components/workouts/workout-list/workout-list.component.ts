@@ -1,15 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { WorkoutService } from '../../../services/workout.service';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { Workout } from '../../../entities';
 
 @Component({
   selector: 'app-workout-list',
   imports: [
-    RouterModule,
-    CommonModule
-  ],
+    RouterModule
+],
   templateUrl: './workout-list.component.html'
 })
 export class WorkoutListComponent implements OnInit {

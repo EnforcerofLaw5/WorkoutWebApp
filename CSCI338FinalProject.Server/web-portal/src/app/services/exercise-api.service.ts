@@ -9,10 +9,10 @@ export class ExerciseApiService {
 
   private readonly baseUrl = 'https://api.api-ninjas.com/v1/exercises';
   private readonly headers = new HttpHeaders({
-    'X-Api-Key': '8RnxQIAUQmtmC3teRrd6ZQ==TOxl3qzAnUvsXGKT'   
+    'X-Api-Key': '8RnxQIAUQmtmC3teRrd6ZQ==TOxl3qzAnUvsXGKT'
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getExercises(): Observable<Exercise[]> {
     return this.http.get<any[]>(`${this.baseUrl}?muscle=all`, { headers: this.headers })
@@ -20,9 +20,11 @@ export class ExerciseApiService {
         map(items =>
           items.map((item, index) => ({
             id: index + 1,
+            workoutId: 0, // Default value for API exercises
             name: item.name,
             category: item.type,
-            primaryMuscle: item.muscle
+            primaryMuscle: item.muscle,
+            exerciseSets: []
           }))
         )
       );
@@ -34,9 +36,11 @@ export class ExerciseApiService {
         map(items =>
           items.map((item, index) => ({
             id: index + 1,
+            workoutId: 0, // Default value for API exercises
             name: item.name,
             category: item.type,
-            primaryMuscle: item.muscle
+            primaryMuscle: item.muscle,
+            exerciseSets: []
           }))
         )
       );

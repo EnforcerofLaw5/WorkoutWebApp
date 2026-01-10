@@ -1,41 +1,33 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+
 import { RouterLink } from '@angular/router';
-import { WorkoutService } from '../../services/workout.service';
+import { WorkoutStore } from '../../stores/workout.store';
 import { Workout } from '../../entities';
-import { enUS } from 'date-fns/locale';
 import { DateFnsModule } from 'ngx-date-fns';
+import { MobxAngularModule } from 'mobx-angular';
 
 
 @Component({
   selector: 'app-workouts',
   standalone: true,
-  imports: [CommonModule, RouterLink, DateFnsModule],
-  templateUrl: './workouts.component.html'
+  imports: [RouterLink, DateFnsModule, MobxAngularModule],
+  templateUrl: './workouts.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkoutsComponent implements OnInit {
 
   protected workouts: Workout[] = [];
-  protected loading$ = true;
 
-  constructor(private workoutService: WorkoutService, private cdr: ChangeDetectorRef) { }
+  constructor(protected workoutStore: WorkoutStore) { }
 
   ngOnInit() {
-    let that = this;
-
-    that.workoutService.getAll().subscribe((ws) => {
-      that.workouts = ws;
-      that.loading$ = false;
-      that.cdr.detectChanges();
-    });
+    this.workoutStore.getAllWorkouts()
   }
 
   deleteWorkout(id: number) {
-    let that = this;
-    this.workoutService.delete(id).subscribe(() => {
-      this.workouts = this.workouts.filter(w => w.id != id);
-      that.cdr.detectChanges();
-    });
+    this.workoutStore.deleteWorkout(id);
+    //   this.workouts = this.workouts.filter(w => w.id != id);
+    // });
     //if (!confirm('Delete this workout?')) return;
 
     //this.workoutService.delete(id).subscribe(() => {

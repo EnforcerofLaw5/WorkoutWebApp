@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { WorkoutService } from '../../../services/workout.service';
@@ -11,11 +11,10 @@ import { AddExerciseComponent } from '../add-exercise/add-exercise.component/add
   selector: 'app-workout-edit',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     RouterModule,
     AddExerciseComponent
-  ],
+],
   templateUrl: './workout-edit.html'
 })
 export class WorkoutEditComponent implements OnInit {

@@ -3,66 +3,67 @@
 
     <h2>Workout Details</h2>
 
-    <div *ngIf="workout">
-
-      <p><strong>Name:</strong> {{ workout.name }}</p>
-      <p><strong>Type:</strong> {{ workout.type }}</p>
-      <p><strong>Date:</strong> {{ workout.date | dfnsFormat: 'MM/dd/yyyy' }}</p>
-      <p><strong>Notes:</strong> {{ workout.notes }}</p>
-
-      <table *ngIf="!loading && workout.exercises.length > 0" class="exercise-table">
-        <thead>
-          <tr>
-            <th>Exercise</th>
-            <th>Muscle</th>
-            <th>Category</th>
-            <th>Sets</th>
-            <th>Reps</th>
-            <th style="width: 100px"></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr *ngFor="let ex of workout.exercises">
-            <td>{{ ex.name }}</td>
-            <td>{{ ex.primaryMuscle }}</td>
-            <td>{{ ex.category }}</td>
-
-            <td>{{ ex.exerciseSets.length || 0 }}</td>
-            <td>
-              {{ ex.exerciseSets.length > 0 ? ex.exerciseSets[0].repsCompleted : '-' }}
-            </td>
-
-            <td>
-              <button class="btn btn-danger btn-delete" (click)="deleteExercise(ex.id)">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p *ngIf="!loading && workout.exercises.length === 0">
-        No exercises added yet.
-      </p>
-
-      <section class="suggestions">
-        <h3>Suggested Workout</h3>
-        <button class="btn btn-primary" (click)="getSuggestion()">Generate Suggestions</button>
-
-        <div *ngIf="suggestedWorkout">
-          <h4>{{ suggestedWorkout.name }}</h4>
-
-          <ul>
-            <li *ngFor="let ex of suggestedWorkout.exercises">
-              {{ ex.name }} – {{ ex.primaryMuscle }}
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <button class="btn btn-primary mt" routerLink="/workouts">Back</button>
-
-    </div>
+    @if (workout) {
+      <div>
+        <p><strong>Name:</strong> {{ workout.name }}</p>
+        <p><strong>Type:</strong> {{ workout.type }}</p>
+        <p><strong>Date:</strong> {{ workout.date | dfnsFormat: 'MM/dd/yyyy' }}</p>
+        <p><strong>Notes:</strong> {{ workout.notes }}</p>
+        @if (!loading && workout.exercises.length > 0) {
+          <table class="exercise-table">
+            <thead>
+              <tr>
+                <th>Exercise</th>
+                <th>Muscle</th>
+                <th>Category</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <th style="width: 100px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ex of workout.exercises; track ex) {
+                <tr>
+                  <td>{{ ex.name }}</td>
+                  <td>{{ ex.primaryMuscle }}</td>
+                  <td>{{ ex.category }}</td>
+                  <td>{{ ex.exerciseSets.length || 0 }}</td>
+                  <td>
+                    {{ ex.exerciseSets.length > 0 ? ex.exerciseSets[0].repsCompleted : '-' }}
+                  </td>
+                  <td>
+                    <button class="btn btn-danger btn-delete" (click)="deleteExercise(ex.id)">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (!loading && workout.exercises.length === 0) {
+          <p>
+            No exercises added yet.
+          </p>
+        }
+        <section class="suggestions">
+          <h3>Suggested Workout</h3>
+          <button class="btn btn-primary" (click)="getSuggestion()">Generate Suggestions</button>
+          @if (suggestedWorkout) {
+            <div>
+              <h4>{{ suggestedWorkout.name }}</h4>
+              <ul>
+                @for (ex of suggestedWorkout.exercises; track ex) {
+                  <li>
+                    {{ ex.name }} – {{ ex.primaryMuscle }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+        </section>
+        <button class="btn btn-primary mt" routerLink="/workouts">Back</button>
+      </div>
+    }
   </div>
 </div>

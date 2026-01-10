@@ -12,13 +12,15 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let w of workouts">
-      <td>{{ w.date }}</td>
-      <td>{{ w.notes }}</td>
-      <td>
-        <button class="btn btn-sm btn-info" [routerLink]="['/workouts', w.id]">View</button>
-        <button class="btn btn-sm btn-danger" (click)="deleteWorkout(w.id)">Delete</button>
-      </td>
-    </tr>
+    @for (w of workouts; track w) {
+      <tr>
+        <td>{{ w.date }}</td>
+        <td>{{ w.notes }}</td>
+        <td>
+          <button class="btn btn-sm btn-info" [routerLink]="['/workouts', w.id]">View</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteWorkout(w.id)">Delete</button>
+        </td>
+      </tr>
+    }
   </tbody>
 </table>

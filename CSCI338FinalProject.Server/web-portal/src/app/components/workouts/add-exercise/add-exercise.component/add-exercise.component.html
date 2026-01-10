@@ -2,30 +2,35 @@
   <h3>Add Exercise</h3>
 
   <label>Exercise</label>
-<div class="exercise-search-container">
-  <label for="exerciseSearch">Search Exercise</label>
-  <input 
-    id="exerciseSearch"
-    type="text"
-    placeholder="Start typing to search..."
-    (input)="searchTerm.next($event.target.value)"
-  />
+  <div class="exercise-search-container">
+    <label for="exerciseSearch">Search Exercise</label>
+    <input
+      id="exerciseSearch"
+      type="text"
+      placeholder="Start typing to search..."
+      (input)="searchTerm.next($event.target.value)"
+      />
 
-  <div class="search-results" *ngIf="apiResults.length > 0">
-    <div 
-      class="search-result-item"
-      *ngFor="let ex of apiResults"
-      (click)="selectExercise(ex)"
-    >
-      <strong>{{ ex.name }}</strong>
-      <span class="muscle">{{ ex.primaryMuscle }}</span>
+      @if (apiResults.length > 0) {
+        <div class="search-results">
+          @for (ex of apiResults; track ex) {
+            <div
+              class="search-result-item"
+              (click)="selectExercise(ex)"
+              >
+              <strong>{{ ex.name }}</strong>
+              <span class="muscle">{{ ex.primaryMuscle }}</span>
+            </div>
+          }
+        </div>
+      }
     </div>
-  </div>
-</div>
 
-<div *ngIf="selectedExercise" class="selected-exercise">
-  <h4>Selected Exercise</h4>
-  <p>{{ selectedExercise.name }} – {{ selectedExercise.primaryMuscle }}</p>
-</div>
-  <button (click)="addExercise()">Add</button>
-</div>
+    @if (selectedExercise) {
+      <div class="selected-exercise">
+        <h4>Selected Exercise</h4>
+        <p>{{ selectedExercise.name }} – {{ selectedExercise.primaryMuscle }}</p>
+      </div>
+    }
+    <button (click)="addExercise()">Add</button>
+  </div>
