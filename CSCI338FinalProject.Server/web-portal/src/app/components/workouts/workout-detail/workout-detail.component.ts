@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { WorkoutService } from '../../../services/workout.service';
-import { ExerciseService } from '../../../services/exercise.service';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { WorkoutStore } from '../../../stores/workout.store';
+import { ExerciseStore } from '../../../stores/exercise.store';
 import { Workout } from '../../../entities';
 import { SuggestionService } from '../../../services/suggestion.service';
 import { DateFnsModule } from 'ngx-date-fns';
@@ -22,9 +21,8 @@ export class WorkoutDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private workoutService: WorkoutService,
-    private exersiceService: ExerciseService,
+    private workoutStore: WorkoutStore,
+    private exerciseStore: ExerciseStore,
     private suggestionService: SuggestionService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -37,12 +35,11 @@ export class WorkoutDetailComponent implements OnInit {
   loadWorkout() {
     this.loading = true;
 
-    this.workoutService.get(this.workoutId).subscribe({
+    this.workoutStore.getWorkoutById(this.workoutId).subscribe({
       next: w => {
         this.workout = w;
         this.loading = false;
-      },
-      complete: () => this.cdr.detectChanges()
+      }
     });
   }
 
@@ -59,9 +56,8 @@ export class WorkoutDetailComponent implements OnInit {
   deleteExercise(exerciseId: number) {
     if (!this.workout) return;
 
-    this.exersiceService.delete(exerciseId).subscribe(() => {
+    this.exerciseStore.delete(exerciseId).subscribe(() => {
       this.workout!.exercises = this.workout!.exercises.filter(e => e.id !== exerciseId);
-      this.cdr.detectChanges();
     });
   }
 }

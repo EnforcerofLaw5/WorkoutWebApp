@@ -17,7 +17,7 @@ export class WorkoutService {
   }
 
   create = (userId: number) => {
-    return this.http.post<Workout[]>(`${this.baseUrl}/users/${userId}`, userId);
+    return this.http.post<Workout>(`${this.baseUrl}/users/${userId}`, userId);
   }
 
   update = (id: number, userId: number, workout: Workout) => {

@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { WorkoutService } from '../../../services/workout.service';
+import { Component, OnInit } from '@angular/core';
+import { WorkoutStore } from '../../../stores/workout.store';
 import { RouterModule } from '@angular/router';
-
 import { Workout } from '../../../entities';
 
 @Component({
@@ -14,23 +13,22 @@ import { Workout } from '../../../entities';
 export class WorkoutListComponent implements OnInit {
   workouts: Workout[] = [];
 
-  constructor(private workoutService: WorkoutService, private cdr: ChangeDetectorRef) { }
+  constructor(private workoutStore: WorkoutStore) { }
 
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
-    this.workoutService.getAll().subscribe({
+    this.workoutStore.getAllWorkouts().subscribe({
       next: data => {
         this.workouts = data;
-        this.cdr.detectChanges();
       },
       error: err => console.error(err)
     });
   }
 
   deleteWorkout(id: number): void {
-    this.workoutService.delete(id).subscribe(() => this.load());
+    this.workoutStore.deleteWorkout(id).subscribe(() => this.load());
   }
 }

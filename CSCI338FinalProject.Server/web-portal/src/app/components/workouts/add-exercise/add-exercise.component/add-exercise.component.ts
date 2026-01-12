@@ -1,6 +1,4 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
-
-import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +9,6 @@ import { WorkoutService } from '../../../../services/workout.service';
 @Component({
   selector: 'add-exercise-form',
   standalone: true,
-  imports: [FormsModule],
   templateUrl: './add-exercise.component.html',
   styleUrl: './add-exercise.component.css',
 })

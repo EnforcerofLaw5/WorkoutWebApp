@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-
 import { RouterLink } from '@angular/router';
 import { WorkoutStore } from '../../stores/workout.store';
 import { Workout } from '../../entities';
@@ -26,11 +25,5 @@ export class WorkoutsComponent implements OnInit {
 
   deleteWorkout(id: number) {
     this.workoutStore.deleteWorkout(id);
-    //   this.workouts = this.workouts.filter(w => w.id != id);
-    // });
-    //if (!confirm('Delete this workout?')) return;
-
-    //this.workoutService.delete(id).subscribe(() => {
-    //this.workouts = this.workouts.filter(w => w.id !== id);
   }
 }
