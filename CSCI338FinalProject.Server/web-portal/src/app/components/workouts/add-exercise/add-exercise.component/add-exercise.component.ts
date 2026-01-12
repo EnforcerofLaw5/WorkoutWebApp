@@ -2,9 +2,9 @@ import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Exercise, Workout } from '../../../../entities';
-import { ExerciseApiService } from '../../../../services/exercise-api.service';
-import { WorkoutService } from '../../../../services/workout.service';
+import { Exercise, Workout } from '@app/entities';
+import { ExerciseApiService } from '@app/services/exercise-api.service';
+import { WorkoutService } from '@app/services/workout.service';
 
 @Component({
   selector: 'add-exercise-form',
@@ -25,7 +25,7 @@ export class AddExerciseComponent {
     private workoutService: WorkoutService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('id');
