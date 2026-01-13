@@ -3,13 +3,14 @@ import { makeObservable } from 'mobx';
 import { observable } from 'mobx-angular';
 import { WorkoutService } from '../services/workout.service';
 import { BaseStore } from './base.store';
-import { Workout } from '../entities';
+import { Workout, Exercise } from '@app/entities';
 import { map } from 'rxjs';
 
 @Injectable()
 export class WorkoutStore extends BaseStore {
     @observable workouts: Workout[] = null!;
     @observable selectedWorkout: Workout | null = null;
+    @observable selectedExercise: Exercise | null = null;
 
     constructor(private workoutService: WorkoutService) {
         super();
@@ -68,6 +69,17 @@ export class WorkoutStore extends BaseStore {
             this.workouts = this.workouts.filter(w => w.id != id);
             this.inprogress = false;
             return id;
+            })
+        )
+    }
+
+    public addToWorkout(workoutId: number, exercise: Exercise) {
+        this.inprogress = true;
+        return this.workoutService.addToWorkout(workoutId, exercise).pipe(
+            map(added => {
+                this.selectedExercise = added;
+                this.inprogress = false;
+                return added;
             })
         )
     }

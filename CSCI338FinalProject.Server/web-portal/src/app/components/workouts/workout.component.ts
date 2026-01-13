@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { WorkoutStore } from '../../stores/workout.store';
-import { Workout } from '../../entities';
+import { WorkoutStore } from '@app/stores/workout.store';
+import { Workout } from '@app/entities';
 import { DateFnsModule } from 'ngx-date-fns';
 import { MobxAngularModule } from 'mobx-angular';
 

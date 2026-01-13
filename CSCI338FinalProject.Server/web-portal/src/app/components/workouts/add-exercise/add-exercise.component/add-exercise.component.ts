@@ -4,7 +4,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Exercise, Workout } from '@app/entities';
 import { ExerciseApiService } from '@app/services/exercise-api.service';
-import { WorkoutService } from '@app/services/workout.service';
+import { WorkoutStore } from '@app/stores/workout.store';
 
 @Component({
   selector: 'add-exercise-form',
@@ -22,7 +22,7 @@ export class AddExerciseComponent {
 
   constructor(
     private exerciseApi: ExerciseApiService,
-    private workoutService: WorkoutService,
+    private workoutStore: WorkoutStore,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) { }
@@ -31,9 +31,8 @@ export class AddExerciseComponent {
     const param = this.route.snapshot.paramMap.get('id');
     if (param) {
       const id = Number(param);
-      this.workoutService.get(id).subscribe(w => {
+      this.workoutStore.getWorkoutById(id).subscribe(w => {
         this.workout = w;
-        this.cdr.detectChanges();
       });
     }
 
@@ -64,12 +63,11 @@ export class AddExerciseComponent {
       exerciseSets: []
     };
 
-    this.workoutService.addToWorkout(this.workout.id, newExercise)
+    this.workoutStore.addToWorkout(this.workout.id, newExercise)
       .subscribe(added => {
         this.workout.exercises.push(added);
         this.selectedExercise = null;
         this.exerciseSearch = '';
-        this.cdr.detectChanges();
       });
   }
 }

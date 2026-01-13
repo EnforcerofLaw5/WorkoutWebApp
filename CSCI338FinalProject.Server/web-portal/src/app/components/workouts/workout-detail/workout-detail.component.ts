@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { WorkoutStore } from '../../../stores/workout.store';
-import { ExerciseStore } from '../../../stores/exercise.store';
-import { Workout } from '../../../entities';
-import { SuggestionService } from '../../../services/suggestion.service';
+import { WorkoutStore } from '@app/stores/workout.store';
+import { ExerciseStore } from '@app/stores/exercise.store';
+import { Workout } from '@app/entities';
+import { SuggestionService } from '@app/services/suggestion.service';
 import { DateFnsModule } from 'ngx-date-fns';
 
 @Component({

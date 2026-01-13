@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { WorkoutStore } from '../../../stores/workout.store';
-import { ExerciseStore } from '../../../stores/exercise.store';
-import { Workout } from '../../../entities';
+import { WorkoutStore } from '@app/stores/workout.store';
+import { ExerciseStore } from '@app/stores/exercise.store';
+import { Workout } from '@app/entities';
 import { AddExerciseComponent } from '../add-exercise/add-exercise.component/add-exercise.component';
 
 @Component({

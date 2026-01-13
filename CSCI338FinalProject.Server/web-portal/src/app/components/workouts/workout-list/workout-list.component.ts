@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WorkoutStore } from '../../../stores/workout.store';
+import { WorkoutStore } from '@app/stores/workout.store';
 import { RouterModule } from '@angular/router';
-import { Workout } from '../../../entities';
+import { Workout } from '@app/entities';
 
 @Component({
   selector: 'app-workout-list',

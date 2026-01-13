@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { makeObservable } from 'mobx';
 import { observable } from 'mobx-angular';
-import { ExerciseService } from '../services/exercise.service';
+import { ExerciseService } from '@app/services/exercise.service';
 import { BaseStore } from './base.store';
-import { Exercise } from '../entities';
+import { Exercise } from '@app/entities';
 import { map } from 'rxjs';
 
 @Injectable()
