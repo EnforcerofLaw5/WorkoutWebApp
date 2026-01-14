@@ -5,12 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Exercise, Workout } from '@app/entities';
 import { ExerciseApiService } from '@app/services/exercise-api.service';
 import { WorkoutStore } from '@app/stores/workout.store';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'add-exercise-form',
   standalone: true,
   templateUrl: './add-exercise.component.html',
   styleUrl: './add-exercise.component.css',
+  imports: [ReactiveFormsModule]
 })
 export class AddExerciseComponent {
   @Input() workout!: Workout;
@@ -19,6 +21,7 @@ export class AddExerciseComponent {
   searchTerm = new Subject<string>();
   apiResults: Exercise[] = [];
   selectedExercise: Exercise | null = null;
+  form!: FormGroup;
 
   constructor(
     private exerciseApi: ExerciseApiService,
@@ -28,6 +31,11 @@ export class AddExerciseComponent {
   ) { }
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      sets: new FormControl(3, Validators.required),
+      reps: new FormControl(10, Validators.required),
+      rpe: new FormControl(8, [Validators.min(1), Validators.max(10)])
+    });
     const param = this.route.snapshot.paramMap.get('id');
     if (param) {
       const id = Number(param);

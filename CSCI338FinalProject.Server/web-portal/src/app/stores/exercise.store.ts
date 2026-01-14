@@ -6,7 +6,7 @@ import { BaseStore } from './base.store';
 import { Exercise } from '@app/entities';
 import { map } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ExerciseStore extends BaseStore {
     @observable exercises: Exercise[] = null!;
     @observable selectedExercise: Exercise | null = null;

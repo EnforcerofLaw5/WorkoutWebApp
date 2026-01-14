@@ -4,13 +4,15 @@ import { WorkoutStore } from '@app/stores/workout.store';
 import { ExerciseStore } from '@app/stores/exercise.store';
 import { Workout } from '@app/entities';
 import { AddExerciseComponent } from '../add-exercise/add-exercise.component/add-exercise.component';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-workout-edit',
   standalone: true,
   imports: [
     RouterModule,
-    AddExerciseComponent
+    AddExerciseComponent,
+    ReactiveFormsModule
 ],
   templateUrl: './workout-edit.html'
 })
@@ -18,6 +20,7 @@ export class WorkoutEditComponent implements OnInit {
 
   workoutId!: number;
   isEdit = false;
+  form!: FormGroup;
 
   workout: Workout = {
     id: 0,
@@ -38,6 +41,13 @@ export class WorkoutEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      name: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      date: new FormControl('', Validators.required),
+      notes: new FormControl('')
+    });
+
     const param = this.route.snapshot.paramMap.get('id');
 
     if (param) {
@@ -51,6 +61,8 @@ export class WorkoutEditComponent implements OnInit {
   }
 
   save() {
+    if (this.form.invalid) return;
+
     if (this.isEdit) {
       this.workoutStore.update(this.workout.id, this.workout.userID, this.workout)
         .subscribe(() => this.router.navigate(['/workouts', this.workout.id]));

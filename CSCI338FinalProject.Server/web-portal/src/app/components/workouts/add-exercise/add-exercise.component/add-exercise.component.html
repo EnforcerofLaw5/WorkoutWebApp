@@ -31,6 +31,17 @@
         <h4>Selected Exercise</h4>
         <p>{{ selectedExercise.name }} – {{ selectedExercise.primaryMuscle }}</p>
       </div>
+
+      <div class="exercise-inputs" [formGroup]="form">
+        <label>Sets</label>
+        <input type="number" formControlName="sets">
+
+        <label>Reps</label>
+        <input type="number" formControlName="reps">
+
+        <label>RPE</label>
+        <input type="number" formControlName="rpe" min="1" max="10">
+      </div>
     }
     <button (click)="addExercise()">Add</button>
   </div>
