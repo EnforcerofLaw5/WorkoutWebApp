@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { makeObservable } from 'mobx';
+import { makeObservable, action, runInAction } from 'mobx';
 import { observable } from 'mobx-angular';
-import { WorkoutService } from '../services/workout.service';
+import { WorkoutService } from '@app/services/workout.service';
 import { BaseStore } from './base.store';
 import { Workout, Exercise } from '@app/entities';
-import { map } from 'rxjs';
 
 @Injectable()
 export class WorkoutStore extends BaseStore {
@@ -18,69 +17,55 @@ export class WorkoutStore extends BaseStore {
     }
 
     public getAllWorkouts() {
-        this.inprogress = true;
-        return this.workoutService.getAll().pipe(
-            map(workouts => {
-                this.workouts = workouts;
-                this.inprogress = false;
-                return workouts;
+        runInAction(() => {
+            this.inprogress = true;
+        })
+        this.workoutService.getAll().subscribe((p) => {
+            runInAction(() => {
+            this.workouts = p;
+            this.inprogress = false;
             })
-        )
+        });
     }
 
+    @action
     public getWorkoutById(id: number) {
         this.inprogress = true;
-        return this.workoutService.get(id).pipe(
-            map(workout => {
+        this.workoutService.get(id).subscribe((workout) => {
             this.selectedWorkout = workout;
             this.inprogress = false;
-            return workout;
-            })
-        );
+        })
     }
 
     public create(userId: number) {
         this.inprogress = true;
-        return this.workoutService.create(userId).pipe(
-            map(created => {
-                this.selectedWorkout = created;
-                this.inprogress = false;
-                return created;
-
-            })
-        )
+        this.workoutService.create(userId).subscribe((created) => {
+            this.selectedWorkout = created;
+            this.inprogress = false;
+        })
     }
 
     public update(id: number, userId: number, workout: Workout) {
         this.inprogress = true;
-        return this.workoutService.update(id, userId, workout).pipe(
-            map(updated => {
-                this.selectedWorkout = updated;
-                this.inprogress = false;
-                return updated;
-            })
-        )
+        this.workoutService.update(id, userId, workout).subscribe((updated) => {
+            this.selectedWorkout = updated;
+            this.inprogress = false;
+        })
     }
 
     public deleteWorkout(id: number) {
         this.inprogress = true;
-        return this.workoutService.delete(id).pipe(
-        map(() => {
-            this.workouts = this.workouts.filter(w => w.id != id);
+        return this.workoutService.delete(id).subscribe(() => {
+            this.workouts = this.workouts.filter(w => w.id !== id);
             this.inprogress = false;
-            return id;
-            })
-        )
+        })
     }
 
     public addToWorkout(workoutId: number, exercise: Exercise) {
         this.inprogress = true;
-        return this.workoutService.addToWorkout(workoutId, exercise).pipe(
-            map(added => {
-                this.selectedExercise = added;
-                this.inprogress = false;
-                return added;
-            })
-        )
+        this.workoutService.addToWorkout(workoutId, exercise).subscribe((added) => {
+            this.selectedExercise = added;
+            this.inprogress = false;
+        })
     }
 }

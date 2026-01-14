@@ -20,7 +20,7 @@ export class WorkoutsComponent implements OnInit {
   constructor(protected workoutStore: WorkoutStore) { }
 
   ngOnInit() {
-    this.workoutStore.getAllWorkouts()
+    this.workoutStore.getAllWorkouts();
   }
 
   deleteWorkout(id: number) {

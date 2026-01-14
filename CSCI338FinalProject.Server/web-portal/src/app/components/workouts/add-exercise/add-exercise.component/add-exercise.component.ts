@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +14,7 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
   styleUrl: './add-exercise.component.css',
   imports: [ReactiveFormsModule]
 })
-export class AddExerciseComponent {
+export class AddExerciseComponent implements OnInit {
   @Input() workout!: Workout;
 
   exerciseSearch = '';
@@ -22,6 +22,15 @@ export class AddExerciseComponent {
   apiResults: Exercise[] = [];
   selectedExercise: Exercise | null = null;
   form!: FormGroup;
+
+  exercise: Exercise = {
+    id: 0,
+    workoutId: 0,
+    name: '',
+    primaryMuscle: '',
+    category: '',
+    exerciseSets: []
+  };
 
   constructor(
     private exerciseApi: ExerciseApiService,
@@ -33,16 +42,20 @@ export class AddExerciseComponent {
   ngOnInit(): void {
     this.form = new FormGroup({
       sets: new FormControl(3, Validators.required),
-      reps: new FormControl(10, Validators.required),
-      rpe: new FormControl(8, [Validators.min(1), Validators.max(10)])
+      name: new FormControl('',  Validators.required),
+      primaryMuscle: new FormControl('', Validators.required),
+      category: new FormControl('', Validators.required)
     });
     const param = this.route.snapshot.paramMap.get('id');
     if (param) {
       const id = Number(param);
-      this.workoutStore.getWorkoutById(id).subscribe(w => {
-        this.workout = w;
-      });
+      this.workoutStore.getWorkoutById(id);
     }
+
+    if (this.exercise.exerciseSets) this.form.patchValue({ sets: this.exercise.exerciseSets });
+    if (this.exercise.name)  this.form.patchValue({ name: this.exercise.name });
+    if (this.exercise.category) this.form.patchValue({  category: this.exercise.category});
+    if (this.exercise.primaryMuscle) this.form.patchValue({ primaryMuscle: this.exercise.primaryMuscle });
 
     this.searchTerm.pipe(
       debounceTime(300),
@@ -62,6 +75,15 @@ export class AddExerciseComponent {
   addExercise() {
     if (!this.selectedExercise) return;
 
+    if (this.form.invalid) return;
+
+    const result = Object.assign({}, this.form.value);
+
+    this.exercise.name = result.name;
+    this.exercise.exerciseSets = result.sets;
+    this.exercise.category = result.category;
+    this.exercise.primaryMuscle = result.primaryMuscle;
+
     const newExercise: Exercise = {
       id: 0,
       workoutId: this.workout.id,
@@ -71,11 +93,6 @@ export class AddExerciseComponent {
       exerciseSets: []
     };
 
-    this.workoutStore.addToWorkout(this.workout.id, newExercise)
-      .subscribe(added => {
-        this.workout.exercises.push(added);
-        this.selectedExercise = null;
-        this.exerciseSearch = '';
-      });
+    this.workoutStore.addToWorkout(this.workout.id, newExercise);
   }
 }

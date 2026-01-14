@@ -4,7 +4,7 @@ import { observable } from 'mobx-angular';
 import { ExerciseService } from '@app/services/exercise.service';
 import { BaseStore } from './base.store';
 import { Exercise } from '@app/entities';
-import { map } from 'rxjs';
+import { tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseStore extends BaseStore {
@@ -16,14 +16,11 @@ export class ExerciseStore extends BaseStore {
         makeObservable(this);
     }
 
-        public delete(id: number) {
+    public delete(id: number) {
         this.inprogress = true;
-        return this.exerciseService.delete(id).pipe(
-            map(() => {
-                this.exercises = this.exercises.filter(e => e.id != id);
-                this.inprogress = false;
-                return id;
-            })
-        )
+        this.exerciseService.delete(id).subscribe(() => {
+            this.exercises = this.exercises.filter(e => e.id != id);
+            this.inprogress = false;
+        })
     }
 }

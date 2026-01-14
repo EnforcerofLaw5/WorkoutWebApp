@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { WorkoutStore } from '@app/stores/workout.store';
 import { ExerciseStore } from '@app/stores/exercise.store';
 import { Workout } from '@app/entities';
@@ -35,7 +35,6 @@ export class WorkoutEditComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private workoutStore: WorkoutStore,
     private exerciseStore: ExerciseStore,
   ) {}
@@ -54,27 +53,33 @@ export class WorkoutEditComponent implements OnInit {
       this.isEdit = true;
       this.workoutId = Number(param);
 
-      this.workoutStore.getWorkoutById(this.workoutId).subscribe(w => {
-        this.workout = w;
-      });
+      this.workoutStore.getWorkoutById(this.workoutId);
     }
+
+    if (this.workout.name) this.form.patchValue({ name: this.workout.name });
+    if (this.workout.type) this.form.patchValue({ type: this.workout.type });
+    if (this.workout.date) this.form.patchValue({ date: this.workout.date });
+    if (this.workout.notes) this.form.patchValue({ notes: this.workout.notes });
   }
 
   save() {
     if (this.form.invalid) return;
 
+    const result = Object.assign({}, this.form.value);
+
+    this.workout.name = result.name;
+    this.workout.type = result.type;
+    this.workout.date = result.date;
+    this.workout.notes = result.notes;
+
     if (this.isEdit) {
-      this.workoutStore.update(this.workout.id, this.workout.userID, this.workout)
-        .subscribe(() => this.router.navigate(['/workouts', this.workout.id]));
+      this.workoutStore.update(this.workout.id, this.workout.userID, this.workout);
     } else {
-      this.workoutStore.create(this.workout.userID)
-        .subscribe(() => this.router.navigate(['/workouts']));
+      this.workoutStore.create(this.workout.userID);
     }
   }
 
   removeExercise(exerciseId: number) {
-    this.exerciseStore.delete(exerciseId).subscribe(() => {
-      this.workout.exercises = this.workout.exercises.filter(e => e.id !== exerciseId);
-    });
+    this.exerciseStore.delete(exerciseId);
   }
 }

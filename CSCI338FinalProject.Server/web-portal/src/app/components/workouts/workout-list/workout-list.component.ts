@@ -20,15 +20,10 @@ export class WorkoutListComponent implements OnInit {
   }
 
   load(): void {
-    this.workoutStore.getAllWorkouts().subscribe({
-      next: data => {
-        this.workouts = data;
-      },
-      error: err => console.error(err)
-    });
+    this.workoutStore.getAllWorkouts();
   }
 
   deleteWorkout(id: number): void {
-    this.workoutStore.deleteWorkout(id).subscribe(() => this.load());
+    this.workoutStore.deleteWorkout(id);
   }
 }

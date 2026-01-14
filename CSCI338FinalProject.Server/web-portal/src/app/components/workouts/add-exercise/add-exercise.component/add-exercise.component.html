@@ -33,14 +33,17 @@
       </div>
 
       <div class="exercise-inputs" [formGroup]="form">
+        <label>Name</label>
+        <input type="string" formControlName="name">
+
         <label>Sets</label>
         <input type="number" formControlName="sets">
 
-        <label>Reps</label>
-        <input type="number" formControlName="reps">
+        <label>Primary Muscle</label>
+        <input type="string" formControlName="primaryMuscle">
 
-        <label>RPE</label>
-        <input type="number" formControlName="rpe" min="1" max="10">
+        <label>Category</label>
+        <input type="string" formControlName="category">
       </div>
     }
     <button (click)="addExercise()">Add</button>

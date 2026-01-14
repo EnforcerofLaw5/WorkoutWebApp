@@ -35,12 +35,7 @@ export class WorkoutDetailComponent implements OnInit {
   loadWorkout() {
     this.loading = true;
 
-    this.workoutStore.getWorkoutById(this.workoutId).subscribe({
-      next: w => {
-        this.workout = w;
-        this.loading = false;
-      }
-    });
+    this.workoutStore.getWorkoutById(this.workoutId);
   }
 
   getSuggestion() {
@@ -56,8 +51,6 @@ export class WorkoutDetailComponent implements OnInit {
   deleteExercise(exerciseId: number) {
     if (!this.workout) return;
 
-    this.exerciseStore.delete(exerciseId).subscribe(() => {
-      this.workout!.exercises = this.workout!.exercises.filter(e => e.id !== exerciseId);
-    });
+    this.exerciseStore.delete(exerciseId);
   }
 }
