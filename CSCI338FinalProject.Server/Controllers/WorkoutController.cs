@@ -28,14 +28,11 @@ namespace CSCI338FinalProject.Server.Controllers
         }
          
         [HttpPost("users/{userId}")]
-        public async Task<IActionResult> Create(int userId)
+        public async Task<IActionResult> Create(int userId, Workout workout)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null) { return NotFound("User not found"); }
-            var workout = new Workout
-            {
-                UserID = userId
-            };
+            workout.UserID = userId;
             _context.Workouts.Add(workout);
             await _context.SaveChangesAsync();
             return Ok();

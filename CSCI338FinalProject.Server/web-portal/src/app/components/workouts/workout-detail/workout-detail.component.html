@@ -1,15 +1,15 @@
-<div class="container">
+<div *mobxAutorun class="container">
   <div class="card">
 
     <h2>Workout Details</h2>
 
-    @if (workout) {
+    @if (workoutStore.selectedWorkout) {
       <div>
-        <p><strong>Name:</strong> {{ workout.name }}</p>
-        <p><strong>Type:</strong> {{ workout.type }}</p>
-        <p><strong>Date:</strong> {{ workout.date | dfnsFormat: 'MM/dd/yyyy' }}</p>
-        <p><strong>Notes:</strong> {{ workout.notes }}</p>
-        @if (!loading && workout.exercises.length > 0) {
+        <p><strong>Name:</strong> {{ workoutStore.selectedWorkout.name }}</p>
+        <p><strong>Type:</strong> {{ workoutStore.selectedWorkout.type }}</p>
+        <p><strong>Date:</strong> {{ workoutStore.selectedWorkout.date | dfnsFormat: 'MM/dd/yyyy' }}</p>
+        <p><strong>Notes:</strong> {{ workoutStore.selectedWorkout.notes }}</p>
+        @if (workoutStore.selectedWorkout.exercises.length > 0) {
           <table class="exercise-table">
             <thead>
               <tr>
@@ -22,7 +22,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (ex of workout.exercises; track ex) {
+              @for (ex of workoutStore.selectedWorkout.exercises; track ex) {
                 <tr>
                   <td>{{ ex.name }}</td>
                   <td>{{ ex.primaryMuscle }}</td>
@@ -41,7 +41,7 @@
             </tbody>
           </table>
         }
-        @if (!loading && workout.exercises.length === 0) {
+        @if (workoutStore.selectedWorkout.exercises.length === 0) {
           <p>
             No exercises added yet.
           </p>

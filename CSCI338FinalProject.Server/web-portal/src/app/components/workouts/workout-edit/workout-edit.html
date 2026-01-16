@@ -1,29 +1,29 @@
-<div class="container">
+<div *mobxAutorun class="container">
 <h2>{{ isEdit ? 'Edit Workout' : 'New Workout' }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="save()">
 
   <div>
-    <label>Name:</label>
-    <input type="text" formControlName="name" required>
+    <label for="name">Name:</label>
+    <input id="name" type="text" formControlName="name" required>
   </div>
 
   <div>
-    <label>Type:</label>
-    <input type="text" formControlName="type" required>
+    <label for="type">Type:</label>
+    <input id="type" type="text" formControlName="type" required>
   </div>
   
   <div>
-    <label>Date:</label>
-    <input type="date" formControlName="date" required>
+    <label for="date">Date:</label>
+    <input id="date" type="date" formControlName="date" required>
   </div>
 
   <div>
-    <label>Notes:</label>
-    <textarea formControlName="notes"></textarea>
+    <label for="notes">Notes:</label>
+    <textarea id="notes" formControlName="notes"></textarea>
   </div>
 
-  <add-exercise-form [workout]="workout"></add-exercise-form>
+  <add-exercise-form [workout]="workoutStore.selectedWorkout"></add-exercise-form>
 
   <button type="submit" class="btn btn-success mt" [disabled]="form.invalid">
     {{ isEdit ? 'Update' : 'Create' }}

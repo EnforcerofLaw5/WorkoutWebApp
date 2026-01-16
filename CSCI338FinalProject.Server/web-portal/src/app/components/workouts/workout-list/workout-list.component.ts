@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { WorkoutStore } from '@app/stores/workout.store';
 import { RouterModule } from '@angular/router';
 import { Workout } from '@app/entities';
+import { MobxAngularModule } from 'mobx-angular';
 
 @Component({
   selector: 'app-workout-list',
   imports: [
-    RouterModule
+    RouterModule, MobxAngularModule
 ],
-  templateUrl: './workout-list.component.html'
+  templateUrl: './workout-list.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkoutListComponent implements OnInit {
   workouts: Workout[] = [];

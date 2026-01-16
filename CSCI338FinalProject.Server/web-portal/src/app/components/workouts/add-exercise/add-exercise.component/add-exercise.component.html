@@ -1,4 +1,4 @@
-<div class="add-exercise-box">
+<div *mobxAutorun class="add-exercise-box">
   <h3>Add Exercise</h3>
 
   <label>Exercise</label>
@@ -26,10 +26,10 @@
       }
     </div>
 
-    @if (selectedExercise) {
+    @if (exersiceStore.selectedExercise) {
       <div class="selected-exercise">
         <h4>Selected Exercise</h4>
-        <p>{{ selectedExercise.name }} – {{ selectedExercise.primaryMuscle }}</p>
+        <p>{{ exersiceStore.selectedExercise.name }} – {{ exersiceStore.selectedExercise.primaryMuscle }}</p>
       </div>
 
       <div class="exercise-inputs" [formGroup]="form">
