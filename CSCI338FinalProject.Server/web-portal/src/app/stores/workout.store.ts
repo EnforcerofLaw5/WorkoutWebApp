@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { makeObservable} from 'mobx';
+import { makeObservable } from 'mobx';
 import { observable } from 'mobx-angular';
 import { WorkoutService } from '@app/services/workout.service';
 import { BaseStore } from './base.store';
@@ -32,17 +32,17 @@ export class WorkoutStore extends BaseStore {
         })
     }
 
-    public create(userId: number, workout: Workout) {
+    public create(workout: Workout) {
         this.inprogress = true;
-        this.workoutService.create(userId, workout).subscribe((created) => {
+        this.workoutService.create(workout).subscribe((created) => {
             this.selectedWorkout = created;
             this.inprogress = false;
         })
     }
 
-    public update(id: number, userId: number, workout: Workout) {
+    public update(workout: Workout) {
         this.inprogress = true;
-        this.workoutService.update(id, userId, workout).subscribe((updated) => {
+        this.workoutService.update(workout).subscribe((updated) => {
             this.selectedWorkout = updated;
             this.inprogress = false;
         })

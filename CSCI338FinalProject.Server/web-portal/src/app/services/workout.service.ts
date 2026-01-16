@@ -16,12 +16,12 @@ export class WorkoutService {
     return this.http.get<Workout>(`${this.baseUrl}/${id}`);
   }
 
-  create = (userID: number, workout: Workout) => {
-    return this.http.post<Workout>(`${this.baseUrl}/users/${workout.userID}`, workout);
+  create = (workout: Workout) => {
+    return this.http.post<Workout>(`${this.baseUrl}`, workout);
   }
 
-  update = (id: number, userId: number, workout: Workout) => {
-    return this.http.put<Workout>(`${this.baseUrl}/users/${userId}/workout/${id}`, workout);
+  update = (workout: Workout) => {
+    return this.http.put<Workout>(`${this.baseUrl}/${workout.id}`, workout);
   }
 
   addToWorkout = (workoutId: number, exercise: Exercise) => {

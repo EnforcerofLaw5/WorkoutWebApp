@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { WorkoutStore } from '@app/stores/workout.store';
 import { ExerciseStore } from '@app/stores/exercise.store';
+import { UserStore } from '@app/stores/user.store';
 import { AddExerciseComponent } from '../add-exercise/add-exercise.component/add-exercise.component';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MobxAngularModule } from "mobx-angular";
@@ -15,7 +16,7 @@ import { when } from 'mobx';
     AddExerciseComponent,
     ReactiveFormsModule,
     MobxAngularModule
-],
+  ],
   templateUrl: './workout-edit.html'
 })
 export class WorkoutEditComponent implements OnInit {
@@ -28,9 +29,12 @@ export class WorkoutEditComponent implements OnInit {
     private route: ActivatedRoute,
     protected workoutStore: WorkoutStore,
     private exerciseStore: ExerciseStore,
-  ) {}
+    private userStore: UserStore
+  ) { }
 
   ngOnInit(): void {
+    this.userStore.getUserById(1); // For demo purposes, load user with ID 1
+
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       type: new FormControl('', Validators.required),
@@ -48,34 +52,46 @@ export class WorkoutEditComponent implements OnInit {
 
       when(() => this.workoutStore.inprogress == false, () => {
         const w = this.workoutStore.selectedWorkout;
-          if (w) {
-            this.form.patchValue({ name: w.name });
-            this.form.patchValue({ type: w.type });
-            this.form.patchValue({ date: new Date(w.date).toISOString().substring(0,10) });
-            this.form.patchValue({ notes: w.notes });
-          }
+        if (w) {
+          this.form.patchValue({ name: w.name });
+          this.form.patchValue({ type: w.type });
+          this.form.patchValue({ date: new Date(w.date).toISOString().substring(0, 10) });
+          this.form.patchValue({ notes: w.notes });
+        }
       })
     }
   }
 
   save() {
     if (this.form.invalid) return;
- 
+
     const result = Object.assign({}, this.form.value);
-
-    if (this.workoutStore.selectedWorkout != null) {
-    this.workoutStore.selectedWorkout.name = result.name;
-    this.workoutStore.selectedWorkout.type = result.type;
-    this.workoutStore.selectedWorkout.date = result.date;
-    this.workoutStore.selectedWorkout.notes = result.notes;
-
+    if (this.workoutStore.selectedWorkout == null) {
+      // New Workout
+      this.workoutStore.selectedWorkout = {
+        id: 0,
+        name: result.name,
+        type: result.type,
+        date: new Date(result.date),
+        notes: result.notes,
+        userID: this.userStore.currentUser ? this.userStore.currentUser.id : 1,
+        user: this.userStore.currentUser!,
+        exercises: []
+      };
+    }
+    else if (this.workoutStore.selectedWorkout) {
+      // Update existing workout
+      this.workoutStore.selectedWorkout.name = result.name;
+      this.workoutStore.selectedWorkout.type = result.type;
+      this.workoutStore.selectedWorkout.date = new Date(result.date);
+      this.workoutStore.selectedWorkout.notes = result.notes;
+    }
     if (this.isEdit) {
-      this.workoutStore.update(this.workoutStore.selectedWorkout.id, this.workoutStore.selectedWorkout.userID, this.workoutStore.selectedWorkout);
+      this.workoutStore.update(this.workoutStore.selectedWorkout);
     } else {
-      this.workoutStore.create(this.workoutStore.selectedWorkout.userID, this.workoutStore.selectedWorkout);
+      this.workoutStore.create(this.workoutStore.selectedWorkout);
     }
   }
-}
 
   removeExercise(exerciseId: number) {
     this.exerciseStore.delete(exerciseId);
