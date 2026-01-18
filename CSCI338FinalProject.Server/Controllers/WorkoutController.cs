@@ -35,27 +35,13 @@ namespace CSCI338FinalProject.Server.Controllers
             workout.User = user;
             _context.Workouts.Add(workout);
             await _context.SaveChangesAsync();
-            return Ok();
-        }
-
-        [HttpPost("{workoutId}")]
-        public IActionResult AddToWorkout(int workoutId, Exercise exercise)
-        {
-            var workout = GetWorkoutById(workoutId);
-            if (workout == null)
-            {
-                return NotFound();
-            }
-            exercise.WorkoutId = workoutId;
-            _context.Exercises.Add(exercise);
-            _context.SaveChanges();
-            return Ok(exercise);
+            return Ok(workout);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateWorkout(Workout workout)
         {
-            var updateWorkout = await _context.Workouts.Include(u => u.User).FirstOrDefaultAsync(w =>  w.Id == workout.Id);
+            var updateWorkout = await _context.Workouts.FirstOrDefaultAsync(w =>  w.Id == workout.Id);
             if (updateWorkout == null) { return NotFound("User not found for this workout"); }
             updateWorkout.Type = workout.Type;
             updateWorkout.Notes = workout.Notes;

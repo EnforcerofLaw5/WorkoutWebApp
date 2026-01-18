@@ -24,10 +24,6 @@ export class WorkoutService {
     return this.http.put<Workout>(`${this.baseUrl}/${workout.id}`, workout);
   }
 
-  addToWorkout = (workoutId: number, exercise: Exercise) => {
-    return this.http.post<Exercise>(`${this.baseUrl}/${workoutId}`, exercise);
-  }
-
   delete = (id: number) => {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }

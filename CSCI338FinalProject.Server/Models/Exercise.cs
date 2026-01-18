@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CSCI338FinalProject.Server.Models
 {
@@ -10,6 +11,7 @@ namespace CSCI338FinalProject.Server.Models
         public string PrimaryMuscle { get; set; }
         public string Category { get; set; }
         public ICollection<ExerciseSet> ExerciseSets { get; set; }
+        [JsonIgnore]
         public Workout Workout { get; set; }
     }
 }

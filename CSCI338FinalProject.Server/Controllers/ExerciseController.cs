@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSCI338FinalProject.Server.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ExerciseController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -24,38 +26,18 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(exercise);
         }
 
-        [HttpPost("workouts/{workoutId}")]
-        public async Task<IActionResult> Create(int workoutId)
+        [HttpPost]
+        public async Task<IActionResult> Create(Exercise exercise)
         {
-            var workout = await _context.Exercises.FirstOrDefaultAsync(w =>  w.Id == workoutId);
-            if (workout == null) { return NotFound("Workout not found"); }
-            var exercise = new Exercise
-            {
-                WorkoutId = workoutId
-            };
             _context.Exercises.Add(exercise);
-            await _context.SaveChangesAsync();
-            return Ok();
+            _context.SaveChanges();
+            return Ok(exercise);
         }
 
-        [HttpPost("{exerciseId}")]
-        public async Task<IActionResult> AddToExercise(int exerciseId ,ExerciseSet exerciseSet)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateExercise(Exercise exercise)
         {
-            var exercise = GetExerciseById(exerciseId);
-            if (exercise == null)
-            {
-                return NotFound();
-            }
-            exerciseSet.ExerciseId = exerciseId;
-            var added = _context.ExerciseSets.Add(exerciseSet);
-            await _context.SaveChangesAsync();
-            return Ok(added);
-        }
-
-        [HttpPut("workout/{workoutId}/exercises/{id}")]
-        public async Task<IActionResult> UpdateExercise(int id, int workoutId, Exercise exercise)
-        {
-            var updateExercise = await _context.Exercises.Include(w => w.Workout).FirstOrDefaultAsync(e => e.Id == id && e.WorkoutId == workoutId);
+            var updateExercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == exercise.Id);
             if (updateExercise == null)
             {
                 return NotFound("Workout not found for this exercise");

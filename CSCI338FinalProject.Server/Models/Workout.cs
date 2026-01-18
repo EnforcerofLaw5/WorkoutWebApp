@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CSCI338FinalProject.Server.Models
 {
@@ -11,6 +12,7 @@ namespace CSCI338FinalProject.Server.Models
         public DateTime date { get; set; } = DateTime.Now;
         public string Name { get; set; }
         public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+        [JsonIgnore]
         public User User { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 <div *mobxAutorun class="container">
 <h2>{{ isEdit ? 'Edit Workout' : 'New Workout' }}</h2>
 
-<form [formGroup]="form" (ngSubmit)="save()">
+<form [formGroup]="form">
 
   <div>
     <label for="name">Name:</label>
@@ -23,9 +23,9 @@
     <textarea id="notes" formControlName="notes"></textarea>
   </div>
 
-  <add-exercise-form [workout]="workoutStore.selectedWorkout"></add-exercise-form>
+  <add-exercise-form (saveEvent)="saveExercise($event)"></add-exercise-form>
 
-  <button type="submit" class="btn btn-success mt" [disabled]="form.invalid">
+  <button type="submit" class="btn btn-success mt" [disabled]="form.invalid" (click)="save()">
     {{ isEdit ? 'Update' : 'Create' }}
   </button>
 

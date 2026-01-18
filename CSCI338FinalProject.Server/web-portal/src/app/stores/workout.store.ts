@@ -55,12 +55,4 @@ export class WorkoutStore extends BaseStore {
             this.inprogress = false;
         })
     }
-
-    public addToWorkout(workoutId: number, exercise: Exercise) {
-        this.inprogress = true;
-        this.workoutService.addToWorkout(workoutId, exercise).subscribe((added) => {
-            this.selectedExercise = added;
-            this.inprogress = false;
-        })
-    }
 }

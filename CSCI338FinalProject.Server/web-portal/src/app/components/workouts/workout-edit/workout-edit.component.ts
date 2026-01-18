@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { WorkoutStore } from '@app/stores/workout.store';
 import { ExerciseStore } from '@app/stores/exercise.store';
 import { UserStore } from '@app/stores/user.store';
@@ -7,6 +7,7 @@ import { AddExerciseComponent } from '../add-exercise/add-exercise.component/add
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MobxAngularModule } from "mobx-angular";
 import { when } from 'mobx';
+import { Exercise } from '@app/entities';
 
 @Component({
   selector: 'app-workout-edit',
@@ -21,6 +22,7 @@ import { when } from 'mobx';
 })
 export class WorkoutEditComponent implements OnInit {
 
+  @ViewChild(AddExerciseComponent) addExerciseComponent: AddExerciseComponent;
   workoutId!: number;
   isEdit = false;
   form!: FormGroup;
@@ -29,7 +31,8 @@ export class WorkoutEditComponent implements OnInit {
     private route: ActivatedRoute,
     protected workoutStore: WorkoutStore,
     private exerciseStore: ExerciseStore,
-    private userStore: UserStore
+    private userStore: UserStore,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -62,10 +65,8 @@ export class WorkoutEditComponent implements OnInit {
     }
   }
 
-  save() {
-    if (this.form.invalid) return;
-
-    const result = Object.assign({}, this.form.value);
+  saveWorkout() {
+      const result = Object.assign({}, this.form.value);
     if (this.workoutStore.selectedWorkout == null) {
       // New Workout
       this.workoutStore.selectedWorkout = {
@@ -75,7 +76,7 @@ export class WorkoutEditComponent implements OnInit {
         date: new Date(result.date),
         notes: result.notes,
         userID: this.userStore.currentUser ? this.userStore.currentUser.id : 1,
-        user: this.userStore.currentUser!,
+        // user: this.userStore.currentUser!,
         exercises: []
       };
     }
@@ -85,6 +86,7 @@ export class WorkoutEditComponent implements OnInit {
       this.workoutStore.selectedWorkout.type = result.type;
       this.workoutStore.selectedWorkout.date = new Date(result.date);
       this.workoutStore.selectedWorkout.notes = result.notes;
+      this.workoutStore.selectedWorkout.user = this.userStore.currentUser;
     }
     if (this.isEdit) {
       this.workoutStore.update(this.workoutStore.selectedWorkout);
@@ -93,7 +95,25 @@ export class WorkoutEditComponent implements OnInit {
     }
   }
 
+  save() {
+    if (this.form.invalid) return;
+    this.saveWorkout();
+    when(() => this.workoutStore.inprogress == false, () => {
+      this.router.navigate(['/workouts'])
+    })
+  }
+
   removeExercise(exerciseId: number) {
     this.exerciseStore.delete(exerciseId);
+  }
+
+  saveExercise(exercise: Exercise) {
+    if (this.workoutStore.selectedWorkout == null) {
+      this.saveWorkout();
+      when(() => this.workoutStore.inprogress == false, () => {
+        this.exerciseStore.selectedExercise.workout = this.workoutStore.selectedWorkout;
+        this.exerciseStore.create(exercise);
+      })
+    }
   }
 }

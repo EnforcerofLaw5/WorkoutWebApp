@@ -24,24 +24,18 @@ namespace CSCI338FinalProject.Server.Controllers
             return Ok(exerciseSet);
         }
 
-        [HttpPost("exercises/{exerciseId}")]
-        public async Task<IActionResult> Create(int exerciseId)
+        [HttpPost]
+        public async Task<IActionResult> Create(ExerciseSet exerciseSet)
         {
-            var exercise = await _context.Exercises.FirstOrDefaultAsync(s => s.Id == exerciseId);
-            if (exercise == null) { return NotFound("Exercise not found"); }
-            var set = new ExerciseSet
-            {
-                ExerciseId = exerciseId
-            };
-            _context.ExerciseSets.Add(set);
+            var added = _context.ExerciseSets.Add(exerciseSet);
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(added);
         }
 
-        [HttpPut("exercises/{exerciseId}/sets/{id}")]
-        public async Task<IActionResult> UpdateExerciseSet(int id, int exerciseId, ExerciseSet exerciseSet)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateExerciseSet(ExerciseSet exerciseSet)
         {
-            var updateExerciseSet = await _context.ExerciseSets.Include(s => s.Exercise).FirstOrDefaultAsync(s => s.Id == id && s.ExerciseId == exerciseId);
+            var updateExerciseSet = await _context.ExerciseSets.FirstOrDefaultAsync(s => s.Id == exerciseSet.Id);
             if (updateExerciseSet == null)
             {
                 return NotFound("ExerciseSet not found for this exercise");

@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -20,7 +20,7 @@ import { when } from 'mobx';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddExerciseComponent implements OnInit {
-  @Input() workout?: Workout | null = null;
+  @Output() saveEvent = new EventEmitter<Exercise>();
 
   exerciseSearch = '';
   searchTerm = new Subject<string>();
@@ -77,21 +77,19 @@ export class AddExerciseComponent implements OnInit {
   }
 
   addExercise() {
-    if (!this.exersiceStore.selectedExercise) return;
-
     if (this.form.invalid) return;
 
     const result = Object.assign({}, this.form.value);
 
-    const newExercise: Exercise = {
+      this.exersiceStore.selectedExercise = {
       id: 0,
       workoutId: this.workoutId!,
       name: result.name,
       primaryMuscle: result.primaryMuscle,
       category: result.category,
       exerciseSets: []
-    };
+      }
 
-    this.workoutStore.addToWorkout(this.workoutId!, newExercise);
+    this.saveEvent.emit(this.exersiceStore.selectedExercise);
   }
 }

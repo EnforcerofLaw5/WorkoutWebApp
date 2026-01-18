@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Exercise, ExerciseSet } from '@app/entities';
+import { Exercise } from '@app/entities';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseService {
@@ -13,23 +13,19 @@ export class ExerciseService {
     return this.http.get<Exercise[]>(this.baseUrl);
   }
 
-  get(id: number): Observable<Exercise[]> {
-    return this.http.get<Exercise[]>(`${this.baseUrl}/${id}`);
+  get(id: number): Observable<Exercise> {
+    return this.http.get<Exercise>(`${this.baseUrl}/${id}`);
   }
 
-  create(workoutId: number): Observable<Exercise[]> {
-    return this.http.post<Exercise[]>(`${this.baseUrl}/workouts/${workoutId}`, workoutId);
+  create(exercise: Exercise): Observable<Exercise> {
+    return this.http.post<Exercise>(`${this.baseUrl}`, exercise);
   }
 
-  update(id: number, workoutId: number, exercise: Exercise): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/workout/${workoutId}/exercises/${id}`, exercise);
+  update(exercise: Exercise): Observable<Exercise> {
+    return this.http.put<Exercise>(`${this.baseUrl}/${exercise.id}`, exercise);
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  }
-
-  addToExercise(exerciseId: number, exerciseSet: ExerciseSet) {
-    return this.http.post(`${this.baseUrl}/${exerciseId}`, exerciseSet);
   }
 }
