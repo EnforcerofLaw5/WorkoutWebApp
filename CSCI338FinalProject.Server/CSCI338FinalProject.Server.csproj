@@ -18,16 +18,16 @@
 
   <ItemGroup>
     <None Update="JSON\Exercise.ts">
-      <CustomToolNamespace>Models\Exercise.cs</CustomToolNamespace>
+      <CustomToolNamespace>Dtos\Exercise.cs</CustomToolNamespace>
     </None>
     <None Update="JSON\ExerciseSet.ts">
-      <CustomToolNamespace>Models\ExerciseSet.cs</CustomToolNamespace>
+      <CustomToolNamespace>Dtos\ExerciseSet.cs</CustomToolNamespace>
     </None>
     <None Update="JSON\User.ts">
-      <CustomToolNamespace>Models\User.cs</CustomToolNamespace>
+      <CustomToolNamespace>Dtos\User.cs</CustomToolNamespace>
     </None>
     <None Update="JSON\Workout.ts">
-      <CustomToolNamespace>Models\Workout.cs</CustomToolNamespace>
+      <CustomToolNamespace>Dtos\Workout.cs</CustomToolNamespace>
     </None>
     <None Update="JSON\WorkoutController.ts">
       <CustomToolNamespace>Controllers\WorkoutController.cs</CustomToolNamespace>

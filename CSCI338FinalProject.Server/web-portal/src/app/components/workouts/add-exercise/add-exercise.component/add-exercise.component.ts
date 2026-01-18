@@ -38,7 +38,7 @@ export class AddExerciseComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       sets: new FormControl(3, Validators.required),
-      name: new FormControl('',  Validators.required),
+      name: new FormControl('', Validators.required),
       primaryMuscle: new FormControl('', Validators.required),
       category: new FormControl('', Validators.required)
     });
@@ -52,7 +52,7 @@ export class AddExerciseComponent implements OnInit {
       if (this.exersiceStore.selectedExercise != null) {
         this.form.patchValue({ sets: this.exersiceStore.selectedExercise.exerciseSets });
         this.form.patchValue({ name: this.exersiceStore.selectedExercise.name });
-        this.form.patchValue({  category: this.exersiceStore.selectedExercise.category});
+        this.form.patchValue({ category: this.exersiceStore.selectedExercise.category });
         this.form.patchValue({ primaryMuscle: this.exersiceStore.selectedExercise.primaryMuscle });
       }
     })
@@ -70,6 +70,7 @@ export class AddExerciseComponent implements OnInit {
   selectExercise(ex: Exercise) {
     this.exersiceStore.selectedExercise = ex;
     this.apiResults = [];
+    this.cdr.detectChanges();
   }
 
   get workoutId(): number | null {
@@ -81,14 +82,14 @@ export class AddExerciseComponent implements OnInit {
 
     const result = Object.assign({}, this.form.value);
 
-      this.exersiceStore.selectedExercise = {
+    this.exersiceStore.selectedExercise = {
       id: 0,
       workoutId: this.workoutId!,
       name: result.name,
       primaryMuscle: result.primaryMuscle,
       category: result.category,
       exerciseSets: []
-      }
+    }
 
     this.saveEvent.emit(this.exersiceStore.selectedExercise);
   }

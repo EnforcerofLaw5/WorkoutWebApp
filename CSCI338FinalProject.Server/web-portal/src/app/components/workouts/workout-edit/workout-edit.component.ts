@@ -66,7 +66,7 @@ export class WorkoutEditComponent implements OnInit {
   }
 
   saveWorkout() {
-      const result = Object.assign({}, this.form.value);
+    const result = Object.assign({}, this.form.value);
     if (this.workoutStore.selectedWorkout == null) {
       // New Workout
       this.workoutStore.selectedWorkout = {
@@ -76,7 +76,6 @@ export class WorkoutEditComponent implements OnInit {
         date: new Date(result.date),
         notes: result.notes,
         userID: this.userStore.currentUser ? this.userStore.currentUser.id : 1,
-        // user: this.userStore.currentUser!,
         exercises: []
       };
     }
@@ -86,7 +85,6 @@ export class WorkoutEditComponent implements OnInit {
       this.workoutStore.selectedWorkout.type = result.type;
       this.workoutStore.selectedWorkout.date = new Date(result.date);
       this.workoutStore.selectedWorkout.notes = result.notes;
-      this.workoutStore.selectedWorkout.user = this.userStore.currentUser;
     }
     if (this.isEdit) {
       this.workoutStore.update(this.workoutStore.selectedWorkout);
@@ -111,9 +109,13 @@ export class WorkoutEditComponent implements OnInit {
     if (this.workoutStore.selectedWorkout == null) {
       this.saveWorkout();
       when(() => this.workoutStore.inprogress == false, () => {
-        this.exerciseStore.selectedExercise.workout = this.workoutStore.selectedWorkout;
+        exercise.workoutId = this.workoutStore.selectedWorkout!.id;
         this.exerciseStore.create(exercise);
       })
+    }
+    else {
+      exercise.workoutId = this.workoutStore.selectedWorkout!.id;
+      this.exerciseStore.create(exercise);
     }
   }
 }

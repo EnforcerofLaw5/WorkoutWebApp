@@ -1,5 +1,4 @@
 ﻿using CSCI338FinalProject.Server.Data;
-using CSCI338FinalProject.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +14,10 @@ namespace CSCI338FinalProject.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllExercises()
         {
-            var exercises = await _context.Exercises.ToListAsync();
+			var exercises = new List<Dtos.Exercise>();
+			var dtoExercises = await _context.Exercises.ToListAsync();
+            foreach (var dto in dtoExercises)
+                exercises.Add(dto.MaptoDto());
             return Ok(exercises);
         }
 
@@ -23,30 +25,24 @@ namespace CSCI338FinalProject.Server.Controllers
         public async Task<IActionResult> GetExerciseById(int id)
         {
             var exercise = await _context.Exercises.FindAsync(id);
-            return Ok(exercise);
+            return Ok(exercise.MaptoDto());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Exercise exercise)
+        public async Task<IActionResult> Create(Dtos.Exercise exercise)
         {
-            _context.Exercises.Add(exercise);
+            var dbExercise = await exercise.MapToModel(_context);
+            _context.Exercises.Add(dbExercise);
             _context.SaveChanges();
-            return Ok(exercise);
+            return Ok(dbExercise.MaptoDto());
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateExercise(Exercise exercise)
+        public async Task<IActionResult> UpdateExercise(Dtos.Exercise exercise)
         {
-            var updateExercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == exercise.Id);
-            if (updateExercise == null)
-            {
-                return NotFound("Workout not found for this exercise");
-            }
-            updateExercise.PrimaryMuscle = exercise.PrimaryMuscle;
-            updateExercise.Category = exercise.Category;
-            updateExercise.Name = exercise.Name;
+            var dbExercise = await exercise.MapToModel(_context);
             await _context.SaveChangesAsync();
-            return Ok(updateExercise);
+            return Ok(dbExercise.MaptoDto());
         }
 
         [HttpDelete("{id}")]

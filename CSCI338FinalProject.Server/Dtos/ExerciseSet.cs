@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
-namespace CSCI338FinalProject.Server.Models
+namespace CSCI338FinalProject.Server.Dtos
 {
     public class ExerciseSet
     {
@@ -10,6 +11,5 @@ namespace CSCI338FinalProject.Server.Models
         public double Rpe { get; set; }
         public double WeightUsed { get; set; }
         public DateTime TimeStamp { get; set; } = DateTime.Now;
-        public Exercise Exercise { get; set; }
     }
 }

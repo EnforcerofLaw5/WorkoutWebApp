@@ -1,19 +1,15 @@
 ﻿
 
- // Find all classes with a name ending with Model  
+ // Find all dto classes 
     export interface Exercise { 
         id: number;
+        workoutId: number;
         name: string;
         primaryMuscle: string;
         category: string;
+        exerciseSets: ExerciseSet[];
 		
     }
-
-
-
-
-
-
 
 
 

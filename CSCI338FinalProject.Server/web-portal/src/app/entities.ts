@@ -5,7 +5,6 @@ export interface Exercise {
     primaryMuscle: string;
     category: string;
     exerciseSets: ExerciseSet[];
-    workout?: Workout;
 }
 
 export interface ExerciseSet {
@@ -31,7 +30,6 @@ export interface User {
 export interface Workout {
     id: number;
     type: string;
-    user?: User;
     userID: number;
     notes: string;
     date: Date;

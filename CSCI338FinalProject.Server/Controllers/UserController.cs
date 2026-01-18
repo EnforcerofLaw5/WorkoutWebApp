@@ -1,5 +1,4 @@
 ﻿using CSCI338FinalProject.Server.Data;
-using CSCI338FinalProject.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +14,10 @@ namespace CSCI338FinalProject.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            List<Dtos.User> users = new List<Dtos.User>();
+            var dbusers = await _context.Users.ToListAsync();
+            foreach (var user in dbusers)
+                users.Add(user.MaptoDto());
             return Ok(users);
         }
 
@@ -27,32 +29,27 @@ namespace CSCI338FinalProject.Server.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(user.MaptoDto());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(Dtos.User user)
         {
-            _context.Users.Add(user);
+            var dbUser = await user.MapToModel(_context);
+            _context.Users.Add(dbUser);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+            user = dbUser.MaptoDto();
+            return Ok(user);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, User user)
+        public async Task<IActionResult> UpdateUser(Dtos.User user)
         {
-            var updateUser = await _context.Users.FindAsync(id);
-            if (updateUser == null)
-            {
-                return NotFound();
-            }
-            updateUser.Name = user.Name;
-            updateUser.Age = user.Age;
-            updateUser.Weight = user.Weight;
-            updateUser.Goal = user.Goal;
+            var dbUser = await user.MapToModel(_context);
             await _context.SaveChangesAsync();
-            return Ok(updateUser);
-        }
+			user = dbUser.MaptoDto();
+			return Ok(user);
+		}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)

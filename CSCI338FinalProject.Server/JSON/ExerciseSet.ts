@@ -1,21 +1,15 @@
-﻿ // Find all classes with a name ending with Model  
+﻿
+
+ // Find all dto classes 
     export interface ExerciseSet { 
         id: number;
-        workoutExerciseId: number;
+        exerciseId: number;
         repsCompleted: number;
         rpe: number;
         weightUsed: number;
         timeStamp: Date;
 		
     }
-
-
-
-
-
-
-
-
 
 
 

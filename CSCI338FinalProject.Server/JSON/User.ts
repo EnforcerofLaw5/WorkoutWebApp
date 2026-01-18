@@ -1,8 +1,6 @@
 ﻿
 
-
-
- // Find all classes with a name ending with Model  
+ // Find all dto classes 
     export interface User { 
         id: number;
         name: string;
@@ -12,10 +10,6 @@
         workouts: Workout[];
 		
     }
-
-
-
-
 
 
 
