@@ -1,6 +1,7 @@
-﻿using CSCI338FinalProject.Server.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WOWA.BLL.DAL;
+using WOWA.BLL.Dtos;
 
 namespace CSCI338FinalProject.Server.Controllers
 {
@@ -14,7 +15,7 @@ namespace CSCI338FinalProject.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            List<Dtos.User> users = new List<Dtos.User>();
+            List<User> users = new List<User>();
             var dbusers = await _context.Users.ToListAsync();
             foreach (var user in dbusers)
                 users.Add(user.MaptoDto());
@@ -33,7 +34,7 @@ namespace CSCI338FinalProject.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Dtos.User user)
+        public async Task<IActionResult> Create(User user)
         {
             var dbUser = await user.MapToModel(_context);
             _context.Users.Add(dbUser);
@@ -43,7 +44,7 @@ namespace CSCI338FinalProject.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Dtos.User user)
+        public async Task<IActionResult> UpdateUser(User user)
         {
             var dbUser = await user.MapToModel(_context);
             await _context.SaveChangesAsync();

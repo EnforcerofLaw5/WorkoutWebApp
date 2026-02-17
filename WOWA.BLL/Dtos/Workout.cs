@@ -1,17 +1,15 @@
-﻿using CSCI338FinalProject.Server.Data;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using WOWA.BLL.DAL;
 
-namespace CSCI338FinalProject.Server.Dtos
+namespace WOWA.BLL.Dtos
 {
-    public class Workout
-    {
-		[Required] public int Id { get; set; }
+    public class Workout : DtoBase
+	{
 		public string Type { get; set; } = "Strength";
-        public int UserID { get; set; }
-        public string Notes { get; set; }
-        public DateTime date { get; set; } = DateTime.Now;
-        public string Name { get; set; }
+		public int UserID { get; set; } = -1;
+        public string Notes { get; set; } = string.Empty;
+		public DateTime date { get; set; } = DateTime.Now;
+        public string Name { get; set; } = string.Empty;
         public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
 
 		public async Task<Models.Workout> MapToModel(AppDbContext dbContext)
@@ -25,6 +23,13 @@ namespace CSCI338FinalProject.Server.Dtos
 			workout.date = date;
 			workout.Notes = Notes;
 			return workout;
+		}
+
+		public void Clean()
+		{
+			Type = Type.Trim();
+			Name = Name.Trim();
+			Notes = Notes.Trim();
 		}
 	}
 }

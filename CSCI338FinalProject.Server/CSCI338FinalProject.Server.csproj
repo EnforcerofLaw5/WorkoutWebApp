@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WOWA.BLL\WOWA.BLL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="JSON\Exercise.ts">
       <CustomToolNamespace>Dtos\Exercise.cs</CustomToolNamespace>
     </None>

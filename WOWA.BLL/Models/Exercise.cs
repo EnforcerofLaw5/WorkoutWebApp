@@ -1,7 +1,6 @@
-﻿using CSCI338FinalProject.Server.Data;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CSCI338FinalProject.Server.Models
+namespace WOWA.BLL.Models
 {
     public class Exercise
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CSCI338FinalProject.Server.Models
+namespace WOWA.BLL.Models
 {
     public class ExerciseSet
     {

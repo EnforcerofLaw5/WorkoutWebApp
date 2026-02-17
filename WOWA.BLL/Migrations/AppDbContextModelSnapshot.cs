@@ -8,7 +8,7 @@ using WOWA.BLL.DAL;
 
 #nullable disable
 
-namespace CSCI338FinalProject.Server.Migrations
+namespace WOWA.BLL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace CSCI338FinalProject.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.Exercise", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.Exercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace CSCI338FinalProject.Server.Migrations
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.ExerciseSet", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.ExerciseSet", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace CSCI338FinalProject.Server.Migrations
                     b.ToTable("ExerciseSets");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.User", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,7 +109,7 @@ namespace CSCI338FinalProject.Server.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.Workout", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.Workout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,44 +142,50 @@ namespace CSCI338FinalProject.Server.Migrations
                     b.ToTable("Workouts");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.Exercise", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.Exercise", b =>
                 {
-                    b.HasOne("CSCI338FinalProject.Server.Models.Workout", null)
+                    b.HasOne("WOWA.BLL.Models.Workout", "Workout")
                         .WithMany("Exercises")
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Workout");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.ExerciseSet", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.ExerciseSet", b =>
                 {
-                    b.HasOne("CSCI338FinalProject.Server.Models.Exercise", null)
+                    b.HasOne("WOWA.BLL.Models.Exercise", "Exercise")
                         .WithMany("ExerciseSets")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Exercise");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.Workout", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.Workout", b =>
                 {
-                    b.HasOne("CSCI338FinalProject.Server.Models.User", null)
+                    b.HasOne("WOWA.BLL.Models.User", "User")
                         .WithMany("Workouts")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.Exercise", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.Exercise", b =>
                 {
                     b.Navigation("ExerciseSets");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.User", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.User", b =>
                 {
                     b.Navigation("Workouts");
                 });
 
-            modelBuilder.Entity("CSCI338FinalProject.Server.Models.Workout", b =>
+            modelBuilder.Entity("WOWA.BLL.Models.Workout", b =>
                 {
                     b.Navigation("Exercises");
                 });

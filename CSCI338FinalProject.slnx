@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="CSCI338FinalProject.Server/CSCI338FinalProject.Server.csproj" />
+  <Project Path="WOWA.BLL/WOWA.BLL.csproj" Id="a756bf56-5934-4278-ac15-a29832c343d4" />
 </Solution>

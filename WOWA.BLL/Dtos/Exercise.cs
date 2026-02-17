@@ -1,8 +1,8 @@
-﻿using CSCI338FinalProject.Server.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using WOWA.BLL.DAL;
 
-namespace CSCI338FinalProject.Server.Dtos
+namespace WOWA.BLL.Dtos
 {
     public class Exercise
     {

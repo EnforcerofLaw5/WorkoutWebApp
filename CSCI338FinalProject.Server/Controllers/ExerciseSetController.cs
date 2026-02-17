@@ -1,7 +1,7 @@
-﻿using CSCI338FinalProject.Server.Data;
-using CSCI338FinalProject.Server.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WOWA.BLL.DAL;
+using WOWA.BLL.Models;
 
 namespace CSCI338FinalProject.Server.Controllers
 {

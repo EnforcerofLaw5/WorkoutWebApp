@@ -1,7 +1,7 @@
-﻿using CSCI338FinalProject.Server.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WOWA.BLL.Models;
 
-namespace CSCI338FinalProject.Server.Data
+namespace WOWA.BLL.DAL
 {
     public class AppDbContext : DbContext
     {   

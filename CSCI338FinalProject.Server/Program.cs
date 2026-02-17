@@ -1,15 +1,8 @@
-using CSCI338FinalProject.Server.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using WOWA.BLL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+builder.Services.AddBusinessLogic(builder.Configuration);
 
 builder.Services.AddControllers();
 

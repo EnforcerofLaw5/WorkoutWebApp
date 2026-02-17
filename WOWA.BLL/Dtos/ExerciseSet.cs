@@ -1,7 +1,6 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CSCI338FinalProject.Server.Dtos
+namespace WOWA.BLL.Dtos
 {
     public class ExerciseSet
     {

@@ -1,6 +1,7 @@
-﻿using CSCI338FinalProject.Server.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WOWA.BLL.DAL;
+using WOWA.BLL.Dtos;
 
 namespace CSCI338FinalProject.Server.Controllers
 {
@@ -14,7 +15,7 @@ namespace CSCI338FinalProject.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllExercises()
         {
-			var exercises = new List<Dtos.Exercise>();
+			var exercises = new List<Exercise>();
 			var dtoExercises = await _context.Exercises.ToListAsync();
             foreach (var dto in dtoExercises)
                 exercises.Add(dto.MaptoDto());
@@ -29,7 +30,7 @@ namespace CSCI338FinalProject.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Dtos.Exercise exercise)
+        public async Task<IActionResult> Create(Exercise exercise)
         {
             var dbExercise = await exercise.MapToModel(_context);
             _context.Exercises.Add(dbExercise);
@@ -38,7 +39,7 @@ namespace CSCI338FinalProject.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateExercise(Dtos.Exercise exercise)
+        public async Task<IActionResult> UpdateExercise(Exercise exercise)
         {
             var dbExercise = await exercise.MapToModel(_context);
             await _context.SaveChangesAsync();
