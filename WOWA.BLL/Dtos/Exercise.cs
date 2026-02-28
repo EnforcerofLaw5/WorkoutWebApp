@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using WOWA.BLL.DAL;
+using static Azure.Core.HttpHeader;
 
 namespace WOWA.BLL.Dtos
 {
-    public class Exercise
+    public class Exercise : DtoBase
     {
 		[Required] public int Id { get; set; }
         public int WorkoutId { get; set; }
@@ -24,5 +25,10 @@ namespace WOWA.BLL.Dtos
             exercise.Category = Category;
             return exercise;
         }
-	}
+
+        public void Clean()
+        {
+            Name = Name.Trim();
+        }
+    }
 }

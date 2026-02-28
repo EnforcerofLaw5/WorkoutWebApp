@@ -1,59 +1,64 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WOWA.BLL.DAL;
 using WOWA.BLL.Dtos;
+using WOWA.BLL.Repositories;
+using WOWA.BLL.Validation;
+
 
 namespace CSCI338FinalProject.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExerciseController : ControllerBase
+    public class ExerciseController(IExerciseRepository _exerciseRepository, IExerciseValidator _exerciseValidator) : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ExerciseController(AppDbContext context) => _context = context;
-
         [HttpGet]
         public async Task<IActionResult> GetAllExercises()
         {
-			var exercises = new List<Exercise>();
-			var dtoExercises = await _context.Exercises.ToListAsync();
-            foreach (var dto in dtoExercises)
-                exercises.Add(dto.MaptoDto());
+            var exercises = await _exerciseRepository.GetAll();
             return Ok(exercises);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExerciseById(int id)
         {
-            var exercise = await _context.Exercises.FindAsync(id);
-            return Ok(exercise.MaptoDto());
+            var exercise = await _exerciseRepository.Get(id);
+            return Ok(exercise);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Exercise exercise)
         {
-            var dbExercise = await exercise.MapToModel(_context);
-            _context.Exercises.Add(dbExercise);
-            _context.SaveChanges();
-            return Ok(dbExercise.MaptoDto());
+            exercise.Clean();
+            var newExercise = await _exerciseRepository.Create(exercise);
+            return Ok(newExercise);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateExercise(Exercise exercise)
         {
-            var dbExercise = await exercise.MapToModel(_context);
-            await _context.SaveChangesAsync();
-            return Ok(dbExercise.MaptoDto());
+            exercise.Clean();
+            var updatedExercise = await _exerciseRepository.Update(exercise);
+            return Ok(updatedExercise);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExercise(int id)
         {
-            var exercise = await _context.Exercises.FindAsync(id);
-            if (exercise == null) { return NotFound(); }
-            _context.Remove(exercise);
-            await _context.SaveChangesAsync();
+            await _exerciseRepository.Delete(id);
             return Ok();
+        }
+
+        [HttpPost("validate")]
+        public async Task<IActionResult> Validate(Exercise exercise)
+        {
+            try
+            {
+                var validationResults = await _exerciseValidator.Validate(exercise);
+                return Ok(validationResults);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }
